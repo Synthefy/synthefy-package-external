@@ -1,0 +1,55 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": true,
+    "allow_split_overlap": false,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.9,
+        "val": 0.05
+    },
+    "filename": "ppg_hr/processed_ppg_data_with_heart_rate.parquet",
+    "window_size": 256,
+    "stride": 32,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "subject"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "BVP"
+        ],
+        "scalers": {
+            "BVP": {
+                "scaler_type": "standard",
+                "scale_by_discrete_metadata": {
+                    "group_labels": [
+                        "activity"
+                    ]
+                }
+            }
+        }
+    },
+    "discrete": {
+        "cols": [
+            "activity",
+            "Gender",
+            "SKIN",
+            "SPORT"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "WEIGHT",
+            "HEIGHT",
+            "AGE",
+            "heart_rate"
+        ],
+        "scalers": {}
+    }
+}

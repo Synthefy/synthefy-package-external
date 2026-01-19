@@ -1,0 +1,58 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": true,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.9,
+        "val": 0.05
+    },
+    "filename": "ppg_samsung/excluding_5.parquet",
+    "window_size": 512,
+    "stride": 64,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "subject"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "BVP",
+            "ECG",
+            "ACC_wrist_idx_0",
+            "ACC_wrist_idx_1",
+            "ACC_wrist_idx_2"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "activity",
+            "Gender",
+            "SKIN",
+            "SPORT"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "EDA_wrist",
+            "TEMP_wrist",
+            "ACC_chest_idx_0",
+            "ACC_chest_idx_1",
+            "ACC_chest_idx_2",
+            "EMG",
+            "EDA_chest",
+            "TEMP_chest",
+            "RESP_chest",
+            "WEIGHT",
+            "HEIGHT",
+            "AGE",
+            "heart_rate"
+        ],
+        "scalers": {}
+    }
+}

@@ -1,0 +1,613 @@
+from __future__ import annotations
+
+from typing import Callable, Dict, List, Optional
+
+import torch
+from einops import rearrange
+from torch import Tensor, nn
+
+from synthefy_pkg.configs.tabicl_config import TokenDecoderConfig
+from synthefy_pkg.model.architectures.pre_embedders import initialize_embedder
+from synthefy_pkg.model.architectures.tabicl.embedding import ColEmbedding
+from synthefy_pkg.model.architectures.tabicl.inference_config import (
+    InferenceConfig,
+)
+from synthefy_pkg.model.architectures.tabicl.interaction import RowInteraction
+from synthefy_pkg.model.architectures.tabicl.learning import ICLearning
+from synthefy_pkg.model.architectures.tabicl.learning_full_reg import (
+    ICRFullLearning,
+)
+from synthefy_pkg.model.architectures.tabicl.learning_reg import ICRLearning
+from synthefy_pkg.model.architectures.tabicl.tabicl import TabICL
+from synthefy_pkg.model.architectures.tabicl.utils import (
+    generate_time_attention_mask,
+)
+from synthefy_pkg.model.foundation_model.residual_block import ResidualBlock
+
+COMPILE = False
+batch_idx = 0
+
+
+class MultilayerTabICL(nn.Module):
+    """A Tabular In-Context Learning Foundation Model.
+
+    TabICL is a transformer-based architecture for in-context learning on tabular data to make
+    predictions without fine-tuning. It processes tabular data through three sequential stages:
+
+    1. Column-wise embedding creates distribution-aware embeddings
+    2. Row-wise interaction captures interactions between features within each row
+    3. Dataset-wise in-context learning to learn patterns from labeled examples and make predictions
+
+    For datasets with more than `max_classes` classes, TabICL switches to hierarchical lassification
+    to recursively partition classes into subgroups, forming a multi-level classification tree.
+
+    Parameters
+    ----------
+    max_classes : int, default=10
+        Number of classes that the model supports natively. If the number of classes
+        in the dataset exceeds this value, hierarchical classification is used.
+
+    embed_dim : int, default=128
+        Model dimension used in the column / row embedding transformers. For the in-context
+        learning transformer, the dimension is this value multiplied by the number of CLS tokens.
+
+    col_num_blocks : int, default=3
+        Number of induced self-attention blocks in the column embedding transformer
+
+    col_nhead : int, default=4
+        Number of attention heads in the column embedding transformer
+
+    col_num_inds : int, default=128
+        Number of inducing points in the column embedding transformer
+
+    row_num_blocks : int, default=3
+        Number of attention blocks in the row interaction transformer
+
+    row_nhead : int, default=8
+        Number of attention heads in the row interaction transformer
+
+    row_num_cls : int, default=4
+        Number of learnable CLS tokens used to aggregate feature information per row
+
+    row_rope_base : float, default=100000
+        Base scaling factor for rotary position encoding in the row interaction transformer
+
+    icl_num_blocks : int, default=12
+        Number of transformer blocks in the in-context learning transformer
+
+    icl_nhead : int, default=4
+        Number of attention heads in the in-context learning transformer
+
+    ff_factor : int, default=2
+        Expansion factor for feedforward networks across all components
+
+    dropout : float, default=0.0
+        Dropout probability across all components
+
+    activation : str or unary callable, default="gelu"
+        Activation function used throughout the model
+
+    norm_first : bool, default=True
+        If True, uses pre-norm architecture across all components
+    """
+
+    def __init__(
+        self,
+        max_classes_or_dim: int = 10,
+        embed_dim: int = 128,
+        col_num_blocks: int = 3,
+        col_nhead: int = 4,
+        col_num_inds: int = 128,
+        row_num_blocks: int = 3,
+        row_nhead: int = 8,
+        row_num_cls: int = 4,
+        embed_col_num_blocks: int = 1,
+        embed_row_num_blocks: int = 1,
+        row_rope_base: float = 100000,
+        icl_num_blocks: int = 12,
+        icl_nhead: int = 4,
+        ff_factor: int = 2,
+        dropout: float = 0.0,
+        activation: str | Callable = "gelu",
+        norm_first: bool = True,
+        is_regression: bool = False,
+        regression_quantiles: List[float] = [],
+        num_layers: int = 1,
+        weight_range: tuple[float, float] = (0, 0),
+        preserve_col_order: bool = False,
+        embedder_name: str = "linear",
+        use_time_mask: bool = False,
+        skip_col_embedding: bool = False,
+        full_reg_decoder_config: Optional[TokenDecoderConfig] = None,
+        embedder_config: str = "",
+        embedder_checkpoint: str = "",
+        train_as_univariate_forecast: bool = False,
+        time_mask_type: str = "history",
+        time_mask_mixing_probs: List[float] = [0.6, 0.3, 0.1],
+        device: str = "cuda",
+    ):
+        super().__init__()
+        self.max_classes_or_dim = max_classes_or_dim
+        self.embed_dim = embed_dim
+        self.col_num_blocks = col_num_blocks
+        self.col_nhead = col_nhead
+        self.col_num_inds = col_num_inds
+        self.row_num_blocks = row_num_blocks
+        self.row_nhead = row_nhead
+        self.row_num_cls = row_num_cls
+        self.row_rope_base = row_rope_base
+        self.icl_num_blocks = icl_num_blocks
+        self.icl_nhead = icl_nhead
+        self.ff_factor = ff_factor
+        self.dropout = dropout
+        self.activation = activation
+        self.norm_first = norm_first
+        self.embed_col_num_blocks = embed_col_num_blocks
+        self.embed_row_num_blocks = embed_row_num_blocks
+        self.regression_quantiles = (
+            regression_quantiles  # TODO: not implemented yet
+        )
+        self.embedder_name = embedder_name
+        self.time_mask_type = time_mask_type
+        self.current_mask_mixing_probs = time_mask_mixing_probs
+        self.time_mask_mixing_probs = time_mask_mixing_probs
+        self.use_time_mask = use_time_mask
+
+        self.num_layers = num_layers
+        self.embed_row_interactors = list()
+        self.embed_column_interactors = list()
+        self.device = device
+
+        self.embedder = initialize_embedder(
+            embed_dim,
+            model_name=embedder_name,
+            skip_value=-100,
+            skip_number=float(0),
+            config=embedder_config,
+            checkpoint=embedder_checkpoint,
+            output_dim=max_classes_or_dim,
+            device=device,
+        )
+
+        for lidx in range(num_layers - 1):
+            self.embed_column_interactors.append(
+                ColEmbedding(
+                    embed_dim=embed_dim,
+                    num_blocks=embed_col_num_blocks,
+                    nhead=col_nhead,
+                    num_inds=col_num_inds,
+                    dim_feedforward=embed_dim * ff_factor,
+                    dropout=dropout,
+                    activation=activation,
+                    norm_first=norm_first,
+                    reserve_cls_tokens=0,
+                    pre_embedded=True,
+                    weight_range=weight_range,
+                    preserve_order=preserve_col_order,
+                    rope_base=row_rope_base,
+                    use_time_mask=use_time_mask,
+                    device=device,
+                )
+            )
+
+            self.embed_row_interactors.append(
+                RowInteraction(
+                    embed_dim=embed_dim,
+                    num_blocks=embed_row_num_blocks,
+                    nhead=row_nhead,
+                    num_cls=0,
+                    rope_base=row_rope_base,
+                    dim_feedforward=embed_dim * ff_factor,
+                    dropout=dropout,
+                    activation=activation,
+                    norm_first=norm_first,
+                    aggregate_operation="all",
+                    weight_range=weight_range,
+                    device=device,
+                )
+            )
+
+        self.embed_row_interactors = nn.ModuleList(self.embed_row_interactors)
+        self.embed_column_interactors = nn.ModuleList(
+            self.embed_column_interactors
+        )
+        self.use_full_reg = full_reg_decoder_config is not None
+
+        self.col_embedder = ColEmbedding(
+            embed_dim=embed_dim,
+            num_blocks=col_num_blocks,
+            nhead=col_nhead,
+            num_inds=col_num_inds,
+            dim_feedforward=embed_dim * ff_factor,
+            dropout=dropout,
+            activation=activation,
+            norm_first=norm_first,
+            reserve_cls_tokens=row_num_cls if not self.use_full_reg else 0,
+            pre_embedded=True,
+            weight_range=weight_range,
+            preserve_order=preserve_col_order,
+            rope_base=row_rope_base,
+            use_time_mask=use_time_mask,
+            skip_embedding=skip_col_embedding,
+        )
+
+        self.row_interactor = RowInteraction(
+            embed_dim=embed_dim,
+            num_blocks=row_num_blocks,
+            nhead=row_nhead,
+            num_cls=row_num_cls if not self.use_full_reg else 0,
+            rope_base=row_rope_base,
+            dim_feedforward=embed_dim * ff_factor,
+            dropout=dropout,
+            activation=activation,
+            norm_first=norm_first,
+            weight_range=weight_range,
+            aggregate_operation="all" if self.use_full_reg else "select_last",
+        )
+
+        if (
+            full_reg_decoder_config is not None
+        ):  # TODO: right now, only regression is supported for full regression
+            full_reg_decoder_config.model_dim = embed_dim
+            self.icl_predictor = ICRFullLearning(
+                output_dim=full_reg_decoder_config.output_dim,
+                d_model=embed_dim,
+                decoder_config=full_reg_decoder_config,
+            )
+        elif is_regression:
+            icl_dim = (
+                embed_dim * row_num_cls
+            )  # CLS tokens are concatenated for ICL
+            self.icl_predictor = ICRLearning(
+                output_dim=max_classes_or_dim,
+                d_model=icl_dim,
+                num_blocks=icl_num_blocks,
+                nhead=icl_nhead,
+                dim_feedforward=icl_dim * ff_factor,
+                dropout=dropout,
+                activation=activation,
+                norm_first=norm_first,
+            )
+        else:
+            icl_dim = (
+                embed_dim * row_num_cls
+            )  # CLS tokens are concatenated for ICL
+            self.icl_predictor = ICLearning(
+                max_classes=max_classes_or_dim,
+                d_model=icl_dim,
+                num_blocks=icl_num_blocks,
+                nhead=icl_nhead,
+                dim_feedforward=icl_dim * ff_factor,
+                dropout=dropout,
+                activation=activation,
+                norm_first=norm_first,
+            )
+
+        self.train_as_univariate_forecast = train_as_univariate_forecast
+        if self.train_as_univariate_forecast:
+            assert full_reg_decoder_config is not None, (
+                "full_reg_decoder_config must be provided for univariate forecast"
+            )
+            self.postprocessor = ICRFullLearning(
+                output_dim=full_reg_decoder_config.output_dim,
+                d_model=embed_dim,
+                decoder_config=full_reg_decoder_config,
+            )
+
+    def to(self, device: str):
+        super().to(device)
+        self.embedder = self.embedder.to(device)
+        return self
+
+    def train(self, mode: bool = True):
+        self.current_mask_mixing_probs = self.time_mask_mixing_probs
+        return super().train(mode)
+
+    def eval(self):
+        self.current_mask_mixing_probs = (
+            [1.0, 0.0, 0.0]
+            if self.use_time_mask
+            else self.time_mask_mixing_probs
+        )
+        self.embedder = self.embedder.eval()
+        return super().eval()
+
+    def _train_forward(
+        self,
+        X: Tensor,
+        y_train: Tensor,
+        d: Optional[Tensor] = None,
+        embed_with_test: bool = False,
+        target_mask: Optional[Tensor] = None,
+        mask: Optional[Tensor] = None,
+    ) -> Dict[str, Tensor]:
+        """The same operation except for the linear embed and additional alternating embedding layers"""
+
+        B, T, H = X.shape
+        train_size = y_train.shape[1]
+        assert train_size <= T, (
+            "Number of training samples exceeds total samples"
+        )
+
+        attn_mask = None
+        if self.use_time_mask:
+            attn_mask = generate_time_attention_mask(
+                self.time_mask_type, self.current_mask_mixing_probs, T, X.device
+            )
+        X_in = X  # preserve the input for other decoders
+        X, univariate_pred_forecast = self.embedder(
+            X,
+            tabicl_target_mask=mask,
+            d=d,  # TODO: embedder does not take in attention mask at the moment
+        )  # (B, T, H) -> (B, T, H, E)
+
+        for lidx in range(self.num_layers - 1):
+            X = self.embed_column_interactors[lidx](
+                X,
+                d=d,
+                train_size=None if embed_with_test else train_size,
+                attn_mask=attn_mask,
+            )  # (B, T, H, E)
+            X = self.embed_row_interactors[lidx](X, d=d)  # (B, T, H, E)
+
+        # Check if d is provided and has the same length as the number of features
+        if d is not None and len(d.unique()) == 1 and d[0] == H:
+            d = None
+
+        # Column-wise embedding -> Row-wise interaction
+        representations = self.row_interactor(
+            self.col_embedder(
+                X,
+                d=d,
+                train_size=None if embed_with_test else train_size,
+                attn_mask=attn_mask,
+            ),
+            d=d,
+        )
+
+        # Dataset-wise in-context learning
+        if target_mask is not None:
+            out = self.icl_predictor(X_in, representations, y_train=y_train, target_mask=target_mask)
+            if self.train_as_univariate_forecast:
+                return {
+                        "univariate_forecast": univariate_pred_forecast[
+                            target_mask.transpose(2, 1) == 1
+                        ],
+                        "multivariate_forecast": out,
+                    }
+            else:
+                return {
+                        "multivariate_forecast": out,
+                        "univariate_forecast": torch.tensor([]),
+                    }
+        else:
+            out = self.icl_predictor(X_in, representations, y_train=y_train)
+            return {
+                    "multivariate_forecast": out,
+                    "univariate_forecast": torch.tensor([]),
+                }
+ 
+    def _inference_forward(
+        self,
+        X: Tensor,
+        y_train: Tensor,
+        feature_shuffles: Optional[List[List[int]]] = None,
+        embed_with_test: bool = False,
+        return_logits: bool = True,
+        softmax_temperature: float = 0.9,
+        inference_config: Optional[InferenceConfig] = None,
+        target_mask: Optional[Tensor] = None,
+        mask: Optional[Tensor] = None,
+    ) -> Dict[str, Tensor]:
+        """Column-wise embedding -> row-wise interaction -> dataset-wise in-context learning.
+
+        Parameters
+        ----------
+        X : Tensor
+            Input tensor of shape (B, T, H) where:
+             - B is the number of tables
+             - T is the number of samples (rows)
+             - H is the number of features (columns)
+            The first train_size positions contain training samples, and the remaining positions contain test samples.
+
+        y_train : Tensor
+            Training labels of shape (B, train_size) where:
+             - B is the number of tables
+             - train_size is the number of training samples provided for in-context learning
+
+        feature_shuffles : Optional[List[List[int]]], default=None
+            A list of feature shuffle patterns for each table in the batch.
+            When provided, indicates that X contains the same table with different feature orders.
+            In this case, column-wise embeddings are computed once and then shuffled accordingly.
+
+        embed_with_test : bool, default=False
+            If True, allow training samples to attend to test samples during embedding
+
+        return_logits : bool, default=True
+            If True, return raw logits instead of probabilities
+
+        softmax_temperature : float, default=0.9
+            Temperature for the softmax function
+
+        inference_config: InferenceConfig
+            Inferenece configuration
+
+        Returns
+        -------
+        Tensor
+            Raw logits or probabilities for test samples of shape (B, test_size, num_classes)
+            where test_size = T - train_size
+        """
+
+        train_size = y_train.shape[1]
+        assert train_size <= X.shape[1], (
+            "Number of training samples exceeds total samples"
+        )
+
+        if inference_config is None:
+            inference_config = InferenceConfig()
+
+        attn_mask = None
+        if self.use_time_mask:
+            attn_mask = generate_time_attention_mask(
+                self.time_mask_type,
+                self.current_mask_mixing_probs,
+                X.shape[1],
+                X.device,
+            )
+
+        X_in = X  # preserve the input for other decoders
+
+        X, univariate_pred_forecast = self.embedder(
+            X, tabicl_target_mask=mask
+        )  # (B, T, H) -> (B, T, H, E)
+
+        for lidx in range(self.num_layers - 1):
+            X = self.embed_column_interactors[lidx](
+                X,
+                d=X.shape[2],
+                train_size=None if embed_with_test else train_size,
+                attn_mask=attn_mask,
+            )  # (B, T, H, E)
+            X = self.embed_row_interactors[lidx](
+                X, d=X.shape[2]
+            )  # (B, T, H, E)
+
+        # Column-wise embedding -> Row-wise interaction
+        representations = self.row_interactor(
+            self.col_embedder(
+                X,
+                train_size=None if embed_with_test else train_size,
+                feature_shuffles=feature_shuffles,
+                mgr_config=inference_config.COL_CONFIG,
+            ),
+            mgr_config=inference_config.ROW_CONFIG,
+        )
+
+        # Dataset-wise in-context learning
+        if target_mask is not None:
+            out = self.icl_predictor(
+                X_in,
+                representations,
+                y_train=y_train,
+                return_logits=return_logits,
+                softmax_temperature=softmax_temperature,
+                mgr_config=inference_config.ICL_CONFIG,
+                target_mask=target_mask,
+            )
+            if self.train_as_univariate_forecast:
+                return {
+                    "univariate_forecast": univariate_pred_forecast[
+                        target_mask.transpose(2, 1) == 1
+                    ],
+                    "multivariate_forecast": out,
+                }
+            else:
+                return {
+                    "multivariate_forecast": out,
+                    "univariate_forecast": torch.tensor([]),
+                }
+        else:           
+            out = self.icl_predictor(
+                X_in,
+                representations,
+                y_train=y_train,
+                return_logits=return_logits,
+                softmax_temperature=softmax_temperature,
+                mgr_config=inference_config.ICL_CONFIG,
+            )
+            return {
+                "multivariate_forecast": out,
+                "univariate_forecast": torch.tensor([]),
+            }
+
+
+    def forward(
+        self,
+        X: Tensor,
+        y_train: Tensor,
+        d: Optional[Tensor] = None,
+        feature_shuffles: Optional[List[List[int]]] = None,
+        embed_with_test: bool = False,
+        return_logits: bool = True,
+        softmax_temperature: float = 0.9,
+        inference_config: Optional[InferenceConfig] = None,
+        target_mask: Optional[Tensor] = None,
+        mask: Optional[Tensor] = None,
+    ) -> Dict[str, Tensor]:
+        """Column-wise embedding -> row-wise interaction -> dataset-wise in-context learning.
+
+        Parameters
+        ----------
+        X : Tensor
+            Input tensor of shape (B, T, H) where:
+             - B is the number of tables
+             - T is the number of samples (rows)
+             - H is the number of features (columns)
+            The first train_size positions contain training samples, and the remaining positions contain test samples.
+
+        y_train : Tensor
+            Training labels of shape (B, train_size) where:
+             - B is the number of tables
+             - train_size is the number of training samples provided for in-context learning
+
+        d : Optional[Tensor], default=None
+            The number of features per dataset. Used only in training mode.
+
+        feature_shuffles : Optional[List[List[int]]], default=None
+            A list of feature shuffle patterns for each table in the batch. Used only in training mode.
+            When provided, indicates that X contains the same table with different feature orders.
+            In this case, column-wise embeddings are computed once and then shuffled accordingly.
+
+        embed_with_test : bool, default=False
+            If True, allow training samples to attend to test samples during embedding
+
+        return_logits : bool, default=True
+            If True, return raw logits instead of probabilities. Used only in training mode.
+
+        softmax_temperature : float, default=0.9
+            Temperature for the softmax function. Used only in training mode.
+
+        inference_config: InferenceConfig
+            Inferenece configuration. Used only in training mode.
+
+        Returns
+        -------
+        Dict[str, Tensor]
+            Dictionary containing:
+            - "multivariate_forecast": Tensor of shape (B, T-train_size, max_classes)
+            - "univariate_forecast": Tensor of shape (B, T-train_size, max_classes) or empty tensor
+        """
+
+        if self.training:
+            out = self._train_forward(
+                X,
+                y_train,
+                d=d,
+                embed_with_test=embed_with_test,
+                target_mask=target_mask,
+                mask=mask,
+            )
+        else:
+            with torch.no_grad():
+                out = self._train_forward(
+                    X,
+                    y_train,
+                    d=d,
+                    embed_with_test=embed_with_test,
+                    target_mask=target_mask,
+                    mask=mask,
+                )
+            # out = self._inference_forward(
+            #     X,
+            #     y_train,
+            #     feature_shuffles=feature_shuffles,
+            #     embed_with_test=embed_with_test,
+            #     return_logits=return_logits,
+            #     softmax_temperature=softmax_temperature,
+            #     inference_config=inference_config,
+            #     target_mask=target_mask,
+            #     final_target_mask=final_target_mask,
+            # )
+
+        return out

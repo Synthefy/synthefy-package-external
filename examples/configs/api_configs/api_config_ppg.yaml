@@ -1,0 +1,27 @@
+dataset_name: ppg
+
+json_save_path: "/tmp"
+
+dataset_path: ${SYNTHEFY_DATASETS_BASE}
+
+preprocess_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/preprocessing_configs/config_${dataset_name}_preprocessing.json
+
+synthesis_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/synthesis_configs/config_${dataset_name}_synthesis.yaml
+synthesis_model_path: ${SYNTHEFY_DATASETS_BASE}/training_logs/${dataset_name}/Time_Series_Diffusion_Training/march_20_2024/checkpoints/best_model.ckpt
+
+forecast_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/forecast_configs/config_${dataset_name}_forecasting.yaml
+forecast_model_path: ${SYNTHEFY_DATASETS_BASE}/training_logs/${dataset_name}/Time_Series_Diffusion_Training/synthefy_forecasting_model_v2a_${dataset_name}/checkpoints/best_model.ckpt
+
+show_gt_synthesis_timeseries: true
+show_gt_forecast_timeseries: true
+only_include_forecast_in_streaming_response: true
+return_only_synthetic_in_streaming_response: true
+
+anomaly_threshold: 3.0
+
+window_naming_config:
+  pretrained_anomaly_prefix: "Failure"
+  synthesis_prefix: "Synthetic"
+  forecast_prefix: "Forecast"
+  search_prefix: "Similar Window"
+  view_prefix: "Window"

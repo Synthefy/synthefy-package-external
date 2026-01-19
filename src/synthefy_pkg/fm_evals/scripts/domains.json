@@ -1,0 +1,173 @@
+{
+  "datasets": [
+    {
+      "dataset_name": [
+        "SCM_large_convlag_synin_s",
+        "SCM_medium_convlag_synin_s",
+        "SCM_medium_obslag_synin_s",
+        "SCM_tiny_convlag_synin_ns",
+        "SCM_tiny_obslag_synin_ns"
+      ],
+      "domain": "Causal Model"
+    },
+    {
+      "dataset_name": [
+        "dynamic_data"
+      ],
+      "domain": "Dynamic"
+    },
+    {
+      "dataset_name": [
+        "al_daily",
+        "aus_electricity",
+        "az_daily",
+        "az_electricity",
+        "cal_daily",
+        "cal_electricity",
+        "car_daily",
+        "car_electricity",
+        "central_electricity",
+        "co_daily",
+        "eastern_electricity",
+        "ecl",
+        "ercot_load",
+        "fl_electricity",
+        "id_electricity",
+        "mds_microgrid",
+        "ne_daily",
+        "ne_electricity",
+        "nm_daily",
+        "northern_electricity",
+        "ny_daily",
+        "ny_electricity2025",
+        "or_electricity",
+        "pa_daily",
+        "pa_electricity",
+        "se_electricity",
+        "solar_alabama",
+        "southern_electricity",
+        "spain_energy",
+        "tetouan_power",
+        "tn_daily",
+        "tn_electricity",
+        "tx_daily",
+        "tx_electricity",
+        "western_electricity"
+      ],
+      "domain": "Energy"
+    },
+    {
+      "dataset_name": [
+        "ev_sensors",
+        "voip"
+      ],
+      "domain": "Engineering"
+    },
+    {
+      "dataset_name": [
+        "beijing_aq",
+        "beijing_embassy",
+        "causal_rivers",
+        "gas_sensor",
+        "oikolab_weather",
+        "open_aq",
+        "weather_mpi"
+      ],
+      "domain": "Environment"
+    },
+    {
+      "dataset_name": [
+        "fred_md1",
+        "fred_md2",
+        "fred_md3",
+        "fred_md4",
+        "fred_md5",
+        "fred_md6",
+        "fred_md7",
+        "fred_md8"
+      ],
+      "domain": "Finance"
+    },
+    {
+      "dataset_name": [
+        "cgm",
+        "sleep_lab"
+      ],
+      "domain": "Health"
+    },
+    {
+      "dataset_name": [
+        "cifar100"
+      ],
+      "domain": "Image"
+    },
+    {
+      "dataset_name": [
+        "austin_water",
+        "blue_bikes",
+        "cursor_tabs",
+        "mn_interstate",
+        "mta_ridership",
+        "paris_mobility",
+        "rideshare_lyft",
+        "rideshare_uber",
+        "tac",
+        "traffic"
+      ],
+      "domain": "Public Info"
+    },
+    {
+      "dataset_name": [
+        "bitcoin_price",
+        "blow_molding",
+        "gift",
+        "gold_prices",
+        "goodrx",
+        "pasta_sales",
+        "rice_prices",
+        "walmart_sales"
+      ],
+      "domain": "Sales"
+    },
+    {
+      "dataset_name": [
+        "mujoco_ant_v2",
+        "mujoco_halfcheetah_v2",
+        "mujoco_hopper_v2",
+        "mujoco_walker2d_v2",
+        "spriteworld"
+      ],
+      "domain": "Scientific"
+    },
+    {
+      "dataset_name": [
+        "stock_nasdaqtrader"
+      ],
+      "domain": "Stock"
+    },
+    {
+      "dataset_name": [
+        "openwebtext"
+      ],
+      "domain": "Text"
+    },
+    {
+      "dataset_name": [
+        "kitti"
+      ],
+      "domain": "Video"
+    },
+    {
+      "dataset_name": [
+        "web_visitors"
+      ],
+      "domain": "Web"
+    },
+    {
+      "dataset_name": [
+        "wikipedia"
+      ],
+      "domain": "Wikipedia"
+    }
+  ]
+}

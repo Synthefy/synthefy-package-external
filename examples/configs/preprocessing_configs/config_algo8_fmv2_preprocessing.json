@@ -1,0 +1,55 @@
+{
+    "dataset_name": "algo8",
+    "filename": "/home/sai/all_aggregated_data_with_commodities_and_gdp.parquet",
+    "timestamps_col": [
+        "PERIOD"
+    ],
+    "group_labels": [
+        "ITEM DESCR"
+    ],
+    "timeseries": [
+        "TONS"
+    ],
+    "continuous": [
+        "BUTTER_AVG_CLOSE",
+        "CORN_AVG_CLOSE",
+        "COTTON_AVG_CLOSE",
+        "LUMBER_AVG_CLOSE",
+        "PALM_OIL_AVG_CLOSE",
+        "POTATOES_AVG_CLOSE",
+        "RAPESEED_AVG_CLOSE",
+        "RICE_AVG_CLOSE",
+        "SOYABEAN_AVG_CLOSE",
+        "SUGAR_AVG_CLOSE",
+        "SUNFLOWER_OIL_AVG_CLOSE",
+        "WHEAT_AVG_CLOSE",
+        "BRENT_CRUDE_OIL_AVG_CLOSE",
+        "COAL_AVG_CLOSE",
+        "CRUDE_OIL_AVG_CLOSE",
+        "ETHANOL_AVG_CLOSE",
+        "GASOLINE_AVG_CLOSE",
+        "METHANOL_AVG_CLOSE",
+        "MOB_PROPANE_AVG_CLOSE",
+        "NATURAL_GAS_AVG_CLOSE",
+        "KENYA_TOTAL_GDP",
+        "KENYA_AGRICULTURE_GDP",
+        "KENYA_INDUSTRY_GDP",
+        "KENYA_SERVICES_GDP",
+        "KENYA_MANUFACTURING_GDP",
+        "KENYA_MINING_QUARRYING_GDP",
+        "KENYA_ELECTRICITY_WATER_GDP",
+        "KENYA_CONSTRUCTION_GDP",
+        "KENYA_WHOLESALE_RETAIL_GDP",
+        "KENYA_ACCOMMODATION_FOOD_GDP",
+        "KENYA_TRANSPORT_STORAGE_GDP",
+        "KENYA_INFORMATION_COMMUNICATION_GDP"
+    ],
+    "tags": [
+        "commodity",
+        "kenya",
+        "sales",
+        "forecast"
+    ],
+    "domain": "retail",
+    "description": "Commodity sales forecast - Kenya"
+}

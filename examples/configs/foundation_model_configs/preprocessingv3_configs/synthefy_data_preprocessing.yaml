@@ -1,0 +1,21 @@
+input_data: [
+    "/mnt/workspace1/data/enriched_datasets/all_univariate_filtered/",
+]
+
+output_location: "/mnt/workspace4/fmv3_datasets/synthefy_5k"
+
+shard_size: 5000
+
+blind_percentage: 0.05
+seed: 12
+
+split: "pretrain"
+device: "cuda"
+num_workers: 32
+
+compute_timeseries_shards: true
+text_embed: true
+compute_cutoff_date_mapping: true
+cutoff_date: "2021-06-01"
+
+use_number: 5000

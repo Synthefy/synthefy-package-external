@@ -1,0 +1,14 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: samsung
+  time_series_length: 500
+  num_channels: 3
+  discrete_condition_embedding_dim: 1131
+
+execution_config:
+  save_path: training_logs
+  run_name: march_20_2024
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training

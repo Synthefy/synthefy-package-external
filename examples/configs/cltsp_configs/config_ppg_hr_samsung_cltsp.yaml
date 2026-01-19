@@ -1,0 +1,72 @@
+device: "cuda"
+task: "cltsp"
+
+dataset_config:
+  dataset_name: ppg_hr_samsung
+  num_channels: 5
+  forecast_length: 256
+  time_series_length: 512
+  required_time_series_length: 384
+  num_discrete_conditions: 19
+  num_continuous_labels: 18
+  num_discrete_labels: 1
+  discrete_condition_embedding_dim: 64
+  latent_dim: 32
+  batch_size: 128
+  use_metadata: true
+  use_timestamp: false
+  num_timestamp_labels: 0
+
+  # Constraints related
+  use_constraints: False
+  extract_equality_constraints_from_windows: False
+  projection_during_synthesis: clipping
+  # projection_during_synthesis: strict
+  constraints: ["min", "max"]
+  # constraints: ["argmax", "max and argmax", "argmin", "min and argmin"]
+
+#CLTSP Config
+encoder_config:
+  encoder_name: "cltsp_v3"
+  d_model: 128
+  discrete_condition_embedding_dim: 64
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 12
+  dropout_pos_enc: 0.2
+  use_metadata: true
+  use_periodic_projection: true
+  patch_len: 32
+  stride: 32
+  metadata_embedding_dim: 64
+  num_positive_samples: 5
+
+  supervised_contrastive_learning:
+      temperature: 0.07
+      base_temperature: 0.07
+      contrast_mode: "all"
+
+execution_config:
+  save_path: training_logs
+  run_name: cltsp_ppg_hr_samsung_2
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  inference_seed: 0
+
+training_config:
+  max_epochs: 100000
+  patience: 20
+  n_plots: 10
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  # check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 8
+  strategy: "ddp_find_unused_parameters_true"
+  temperature: 1.0
+  use_clip_loss: true
+  use_condition_scl_loss: false
+  use_timeseries_scl_loss: false
+  train_for_classification: true

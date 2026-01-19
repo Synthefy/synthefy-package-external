@@ -1,0 +1,75 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: vibration
+  time_series_length: 512
+  required_time_series_length: 512
+  num_channels: 3
+  num_discrete_conditions: 5
+  num_discrete_labels: 10
+  num_continuous_labels: 2
+  num_timestamp_labels: 0
+  use_timestamp: False
+  latent_dim: 128
+  discrete_condition_embedding_dim: 128
+  batch_size: 128
+
+
+denoiser_config:
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 8
+  dropout_pos_enc: 0.2 
+  use_metadata: True
+  use_periodic_projection: True
+
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: vibration_signals
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  max_epochs: 500
+  n_plots: 10
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "ddp_find_unused_parameters_true"
+
+
+#for evaluation TRTR (train real, test real), TSTR (train synthetic, test real), TRSTR (train real, synthetic, test synthetic)
+tstr_config:
+  #only classification is supported for now
+  synthetic_or_original_or_custom: "custom"
+
+  classifier:
+      model_name: resnet1d50
+
+  device: cuda
+  seed: 42
+  num_workers: 4
+  training:
+      learning_rate: 1e-3
+      max_epochs: 2
+      log_dir: /tmp/vibration_tstr_training
+  dataset:
+    #TODO remove this redundancy
+    num_channels: 1
+    time_series_length: 512
+    required_time_series_length: 512
+    use_reduced_horizon: False # turn this to True when you want to use required_time_series_length as the features instead of time_series_length
+    multi_label: False
+    classification_start_index: 11  # Check the output JSON file $SYNTHEFY_DATASET_BASE/ppg/discrete_windows_columns.json for column indices (in this case, we are doing skin color classification based on the time series data)
+    classification_inclusive_end_index: 12 # Note - this is inclusive
+    batch_size: 16

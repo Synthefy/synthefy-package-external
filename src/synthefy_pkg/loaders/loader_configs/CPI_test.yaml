@@ -1,0 +1,25 @@
+---
+standardized_dataset_category_names: 
+  - abs
+meta_standardized_dataset_category_names:
+  - fred_data
+time_series_filters:
+  - frequency_geq: Quarterly
+  - length_geq: 128
+  - frequency: Monthly
+  - title: CPI
+complex_filter: (frequency_geq_Quarterly&length_geq_128)&~(frequency_Monthly&length_geq_128&title_CPI) # exclude CPI since we are using that as metadata
+post_filters:
+  - length_geq: 128
+metadata_n_longest: 50
+metadata_filters:
+  - title: CPI
+  - frequency: Monthly
+  - length_geq: 128
+input_data_dir: /home/data/standardized/
+output_dir: /home/data/enriched_datasets/
+nan_fill_frequency: true
+time_period: 
+  start: 1980-01-01
+  end: 2024-12-31
+...

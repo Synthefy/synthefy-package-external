@@ -1,0 +1,244 @@
+# TabICL Training Configuration - Heavy Tailed Samplers Test
+
+# Prior Dataset Config
+prior_dir:  /workspace/data/synthetic_data/heavy_tailed_series_batched # null for generating on the fly
+load_prior_start: 0
+delete_after_load: false
+batch_size_per_gp: 4
+min_features: 5
+max_features: 20 # Must match num_correlates - 1 in dataset_config
+max_classes: 10
+min_seq_len: null
+max_seq_len: 768 # Must match time_series_length in dataset_config
+log_seq_len: false
+seq_len_per_gp: false
+min_train_size: 0.1
+max_train_size: 0.9
+replay_small: false
+prior_type: mix_scm
+prior_device: cpu  # Example: Using GPU 5 for prior data generation
+is_regression: true  # Set to true for regression tasks
+row_missing_prob: 0.0
+column_has_missing_prob: 0.0
+dataset_length: 5000
+exclude_inputs: "allow"
+add_synthetic_timestamps:
+  - "minutely"
+  - "hourly"
+  - "daily"
+  - "weekly"
+  - "monthly"
+dataset_has_lag: 1.0
+max_lag: 0.1
+
+
+# SCM Prior Config - Fixed Hyperparameters
+scm_use_layer_operator: True
+scm_mix_probs: [1.0, 0.0]  # Mix probabilities for MLP vs Tree SCM 
+# TODO: tree layer convolutions not supported at the moment, so unused
+scm_tree_model: xgboost  # Tree model type for TreeSCM
+scm_tree_depth_lambda: 0.5  # Lambda for tree depth sampling
+scm_tree_n_estimators_lambda: 0.5  # Lambda for number of estimators sampling
+scm_balanced: false  # Whether to balance classes
+scm_multiclass_ordered_prob: 0.0  # Probability of ordered multiclass
+scm_cat_prob: 0.2  # Probability of categorical features
+scm_max_categories: .inf  # Maximum number of categories
+scm_scale_by_max_features: false  # Whether to scale by max features
+scm_permute_features: true  # Whether to permute features
+scm_permute_labels: true  # Whether to permute labels
+scm_sigmoid_mixed_sampling_rate: 7.0
+
+# SCM Prior Config - Sampled Hyperparameters with Heavy Tailed Distributions
+scm_multiclass_type:
+  distribution: meta_choice
+  choice_values: [value, rank]
+
+scm_block_wise_dropout:
+  distribution: meta_choice
+  choice_values: [false, true]
+
+# sampling parameters for inputs
+scm_used_sampler:
+  distribution: meta_choice
+  choice_values: [ts]
+
+scm_sampling:
+  distribution: meta_choice
+  choice_values: [mixed_subseries]
+
+scm_mlp_dropout_prob:
+  distribution: meta_beta
+  scale: 0.9
+  min: 0.1
+  max: 5.0
+
+scm_is_causal:
+  distribution: meta_choice
+  choice_values: [true]
+
+# Using heavy tailed distribution for number of causes - favors smaller values
+# modify below values for tiny, medium, large
+# scm_num_causes:
+#   distribution: meta_heavy_tailed_log_scaled
+#   min_scale: 2.0
+#   max_scale: 10.0
+#   min_shape: 0.8
+#   max_shape: 1.5
+#   round: true
+#   lower_bound: 1
+
+# scm_num_layers:
+#   distribution: meta_heavy_tailed_log_scaled
+#   max_mean: 1.4
+#   min_mean: 0.01
+#   min_shape: 0.5
+#   max_shape: 2.0
+#   round: true
+#   lower_bound: 1.0
+
+# scm_hidden_dim:
+#   distribution: meta_heavy_tailed_log_scaled
+#   min_scale: 5.0
+#   max_scale: 10.0 # 160.0
+#   min_shape: 0.7
+#   max_shape: 1.3
+#   round: true
+#   lower_bound: 10
+
+scm_num_causes:
+  distribution: "meta_trunc_norm_log_scaled"
+  max_mean: 10
+  min_mean: 0.2
+  round: True
+  lower_bound: 1
+
+scm_num_layers:
+  distribution: "meta_trunc_norm_log_scaled"
+  max_mean: 1.4
+  min_mean: 0.01
+  round: True
+  lower_bound: 1.0
+
+scm_hidden_dim:
+  distribution: "meta_trunc_norm_log_scaled"
+  max_mean: 10
+  min_mean: 0.2
+  round: True
+  lower_bound: 10
+
+##############################################################################
+scm_y_is_effect:
+  distribution: meta_choice
+  choice_values: [true, false]
+
+scm_in_clique:
+  distribution: meta_choice
+  choice_values: [true, false]
+
+scm_sort_features:
+  distribution: meta_choice
+  choice_values: [true, false]
+
+scm_mlp_dropout_prob:
+  distribution: "meta_beta"
+  scale: 0.9
+  min: 0.1
+  max: 5.0
+
+
+# Using heavy tailed log-scaled distribution for initialization std - favors smaller values
+scm_init_std:
+  distribution: meta_heavy_tailed_log_scaled
+  max_mean: 5.0
+  min_mean: 0.01
+  round: false
+  lower_bound: 0.0
+
+# Using heavy tailed log-scaled distribution for noise std - favors smaller values
+scm_noise_std:
+  distribution: meta_heavy_tailed_log_scaled
+  max_mean: 0.2
+  min_mean: 0.05
+  round: false
+  lower_bound: 0.0
+
+# scm layer kernel parameters
+scm_kernel_size_min: 
+  distribution: "uniform"
+  max: 1.1
+  min: 1
+  round: True
+
+scm_kernel_size_max: 
+  distribution: "uniform"
+  max: 1.1
+  min: 1
+  round: True
+  
+scm_kernel_sigma: 
+  distribution: "uniform"
+  max: 1.0
+  min: 0.8
+  round: False
+
+scm_kernel_type: 
+  distribution: "meta_choice"
+  choice_values: ["gaussian", "recent_exponent", "uniform"]
+
+# scm functional lag parameters
+scm_functional_lag_min: 
+  distribution: "uniform"
+  max: 0.05
+  min: 0.01
+  round: False
+
+scm_functional_lag_max: 
+  distribution: "uniform"
+  max: 0.1
+  min: 0.01
+  round: False
+
+scm_functional_lag_rate: 
+  distribution: "uniform"
+  max: 0.5
+  min: 0.0
+  round: False
+  
+scm_use_functional_lag: 
+  distribution: "meta_choice"
+  choice_values: [False]
+
+scm_functional_lag_variance: # only used by random lags, the variance for the random lags
+  distribution: "uniform"
+  max: 0.02
+  min: 0.0
+  round: False
+
+scm_layer_has_functional_lag_rate: 
+  distribution: "uniform"
+  max: 1.0
+  min: 0.5
+  round: False
+
+# counterfactual parameters
+scm_counterfactual_enabled: 
+  distribution: "meta_choice"
+  choice_values: [False]
+
+scm_counterfactual_type: 
+  distribution: "meta_choice"
+  choice_values: [random_normal, random_uniform, zero, additive_norm]
+
+scm_counterfactual_num_changes: 
+  distribution: "meta_trunc_norm_log_scaled"
+  max_mean: 10
+  min_mean: 1
+  round: True
+  lower_bound: 1
+
+scm_counterfactual_num_samples: 
+  distribution: "meta_trunc_norm_log_scaled"
+  max_mean: 0.1
+  min_mean: 0.1
+  round: True
+  lower_bound: 0

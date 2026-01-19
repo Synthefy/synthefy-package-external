@@ -1,0 +1,27 @@
+{
+    "dataset_name": "walmart",
+    "filename": "/home/sai/Walmart_updated.parquet",
+    "timestamps_col": [
+        "Date"
+    ],
+    "group_labels": [
+        "Store"
+    ],
+    "timeseries": [
+        "Weekly_Sales"
+    ],
+    "continuous": [
+        "Temperature",
+        "Fuel_Price",
+        "CPI",
+        "Unemployment"
+    ],
+    "tags": [
+        "retail",
+        "walmart",
+        "sales",
+        "forecast"
+    ],
+    "domain": "retail",
+    "description": "Walmart sales forecast"
+}

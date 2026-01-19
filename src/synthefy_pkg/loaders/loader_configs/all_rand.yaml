@@ -1,0 +1,20 @@
+---
+standardized_dataset_category_names: 
+  - ALL
+time_series_filters:
+  - frequency_geq: Quarterly
+  - length_geq: 128
+post_filters:
+  - length_geq: 128
+input_data_dir: /home/data/standardized/
+output_dir: /home/data/enriched_datasets/
+outname: all_rand
+nan_fill_frequency: true
+time_period: 
+  start: 1980-01-01
+  end: 2024-12-01
+num_datasets_to_save: 2000000
+sample_dataset_ratio: 2.0
+num_variates_per_enrich: 50
+num_files_per_subset: 50
+... 

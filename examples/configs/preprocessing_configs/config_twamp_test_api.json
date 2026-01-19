@@ -1,0 +1,54 @@
+{
+  "prefill_training_configs": true,
+  "window_size": 96,
+  "stride": 100000000000000,
+  "timestamps_col": [
+    "@timestamp"
+  ],
+  "group_labels": {
+    "cols": [
+      "sto_kng",
+      "sran_node_id",
+      "sender_dscp"
+    ]
+  },
+  "timeseries": {
+    "cols": [
+      "counter.drop_mean_fwd",
+      "counter.drop_mean_rec",
+      "counter.jitter_mean_fwd",
+      "counter.jitter_mean_rec",
+      "counter.rtt_mean"
+    ]
+  },
+  "discrete": {
+    "cols": [
+      "label",
+      "client_index",
+      "sender_index",
+      "client_dscp",
+      "connection"
+    ]
+  },
+  "continuous": {
+    "cols": [
+      "distance_to_twamp_reflector_km",
+      "counter.rtt_max",
+      "counter.rtt_min",
+      "counter.jitter_max_fwd",
+      "counter.jitter_min_fwd",
+      "counter.jitter_max_rec",
+      "counter.jitter_min_rec",
+      "counter.drop_mean_peak_fwd",
+      "counter.drop_mean_peak_rec",
+      "counter.tx_pkt",
+      "counter.tx_pkt_reflector",
+      "counter.rx_pkt",
+      "counter.dscp",
+      "counter.lost_pkt_fwd",
+      "counter.lost_pkt_rec",
+      "counter.drop_mean_all",
+      "counter.success_rate_all"
+    ]
+  }
+}

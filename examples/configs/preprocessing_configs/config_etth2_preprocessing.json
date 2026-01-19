@@ -1,0 +1,41 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "window_from_beginning": false,
+    "shuffle": false,
+    "train_val_split": {
+        "train": 0.7,
+        "val": 0.1
+    },
+    "filename": "etth2/ETTh2.csv",
+    "window_size": 192,
+    "stride": 24,
+    "timestamps_col": [
+        "date"
+    ],
+    "group_labels": {
+        "cols": [],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "OT"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "HUFL",
+            "HULL",
+            "MUFL",
+            "MULL",
+            "LUFL",
+            "LULL"
+        ],
+        "scalers": {}
+    }
+}

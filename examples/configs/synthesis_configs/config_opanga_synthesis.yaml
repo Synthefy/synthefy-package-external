@@ -1,0 +1,33 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: opanga2
+  num_channels: 5
+  time_series_length: 48
+  required_time_series_length: 48
+  num_discrete_conditions: 128
+  num_discrete_labels: 2
+  num_continuous_labels: 34
+  discrete_condition_embedding_dim: 64
+  latent_dim: 64
+
+denoiser_config:
+  positional_embedding_dim: 64
+  channel_embedding_dim: 16
+  channels: 128
+  n_heads: 8
+  n_layers: 6
+  dropout_pos_enc: 0.2 
+  use_metadata: True
+
+metadata_encoder_config:
+  channels: 128
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: synthesis_discrete_opanga2_embedding_128
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training

@@ -1,0 +1,88 @@
+{
+  "prefill_training_configs": true,
+  "custom_output_path": "",
+  "search_encoder": null,
+  "use_label_col_as_discrete_metadata": true,
+  "shuffle": false,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "opanga2/opanga_combined_1000.parquet",
+  "window_size": 48,
+  "stride": 48,
+  "timestamps_col": [
+    "Read Time (Timestamp UTC+0)"
+  ],
+  "timestamps": {
+    "timestamps_features": [
+      "D",
+      "H",
+      "T"
+    ]
+  },
+  "group_labels": {
+    "cols": [
+      "Cell Identifier",
+      "Packet Processor Name"
+    ],
+    "scalers": {
+      "Cell Identifier": {
+        "scaler_type": "embedding"
+      },
+      "Packet Processor Name": {
+        "scaler_type": "embedding"
+      }
+    }
+  },
+  "timeseries": {
+    "cols": [
+      "Burst Width (ms)",
+      "CX Score",
+      "CX Sample Count",
+      "Throughput (Kbps)",
+      "Time to 500KB (ms)"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [
+      "MedianSimultaneousActiveSubscriberCount",
+      "TCP Latency Sample Count",
+      "Time to 500KB Sample Count",
+      "Sufficient Throughput Percent Sample Count",
+      "Standard: Uplink Transmitted (B)",
+      "Burst Width Sample Count",
+      "Burst Throughput (Kbps)",
+      "Interpacket Gap Sample Count",
+      "Elephant: Downlink Transmitted (B)",
+      "TCP Latency StdDev Sample Count",
+      "Throughput Sample Count",
+      "Burst Throughput StdDev (Kbps)",
+      "Congestion Ratio",
+      "Average Recovered Capacity (Kbps)",
+      "AverageSimultaneousActiveSubscriberCount",
+      "Interpacket Gap (ms)",
+      "Retransmission Percent Sample Count",
+      "Elephant: Flow Count",
+      "Burst Throughput Sample Count",
+      "Average Recovered Capacity Sample Count",
+      "TCP Latency (ms)",
+      "Interval Duration (Minutes)",
+      "Elephant: Uplink Transmitted (B)",
+      "Interpacket Gap StdDev Sample Count",
+      "Standard: Downlink Transmitted (B)",
+      "Burst Throughput StdDev Sample Count",
+      "Retransmission Percent",
+      "Interpacket Gap StdDev (ms)",
+      "Standard: Flow Count",
+      "TCP Latency StdDev (ms)",
+      "Sufficient Throughput Percent"
+    ],
+    "scalers": {}
+  }
+}

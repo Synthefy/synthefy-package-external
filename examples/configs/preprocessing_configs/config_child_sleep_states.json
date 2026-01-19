@@ -1,0 +1,39 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": true,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.8,
+        "val": 0.1
+    },
+    "filename": "child_sleep_states/event_data.parquet",
+    "window_size": 256,
+    "stride": 256,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "series_id",
+            "night"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "anglez",
+            "enmo"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "event"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [],
+        "scalers": {}
+    }
+}

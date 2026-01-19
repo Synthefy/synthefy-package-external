@@ -1,0 +1,48 @@
+device: "cuda"
+task: "forecast"
+
+dataset_config:
+  dataset_name: electricity
+  num_channels: 1
+  time_series_length: 96
+  forecast_length: 32
+  num_discrete_labels: 1
+  num_discrete_conditions: 370
+  num_continuous_labels: 3
+  discrete_condition_embedding_dim: 128
+
+  latent_dim: 64
+  num_timestamp_labels: 3
+  use_metadata: True
+  use_timestamp: True
+  batch_size: 2048
+
+# These parameters are fixed for the pretrained timesfm model
+timesfm_config:
+  checkpoint_name: "google/timesfm-1.0-200m-pytorch"
+  input_patch_len: 32
+  output_patch_len: 128
+  num_layers: 20
+  model_dims: 1280
+  num_heads: 16
+
+execution_config:
+  save_path: training_logs
+  run_name: "timesfm_finetuned_electricity"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  patience: 20
+  lr_scheduler:
+    scheduler_name: "exponential"
+    gamma: 0.999
+  learning_rate: 1e-4
+  n_plots: 4
+  save_after_every_iters: 5
+  save_after_every_n_epochs: 5
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

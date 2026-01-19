@@ -1,0 +1,82 @@
+{
+  "prefill_training_configs": true,
+  "custom_output_path": "",
+  "search_encoder": null,
+  "use_label_col_as_discrete_metadata": true,
+  "shuffle": true,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "infovista_ativa/ativa_anomaly_data.csv",
+  "window_size": 100,
+  "stride": 48,
+  "timestamps_col": [
+    "timestamp"
+  ],
+  "timestamps": {
+    "timestamps_features": [
+      "D",
+      "H",
+      "T",
+      "S"
+    ]
+  },
+  "group_labels": {
+    "cols": [
+      "mo_name"
+    ]
+  },
+  "timeseries": {
+    "cols": [
+      "sip_5xx_rate",
+      "sip_ner",
+      "sip_weighted_rfactor"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [],
+    "scalers": {}
+  },
+  "anomaly_detection": {
+    "settings": {
+      "num_anomalies_limit": 50,
+      "min_anomaly_score": null,
+      "n_jobs": -1
+    },
+    "model": {
+      "type": "synthefy_anomaly_detector_v2",
+      "params": {
+        "daily_seasonality": true,
+        "weekly_seasonality": true,
+        "yearly_seasonality": false,
+        "interval_width": 0.95
+      }
+    },
+    "frequency": {
+      "type": "5T",
+      "windows": {
+        "volatility": 24,
+        "pattern": 168,
+        "min_points": 50,
+        "baseline_multiplier": 7
+      }
+    },
+    "sd_thresholds": {
+      "peak": 2.5,
+      "scattered": 2.5,
+      "out_of_pattern": 2.5
+    },
+    "concurrent_anomalies": {
+      "enabled": true,
+      "time_window": "1H",
+      "min_kpis_for_concurrent_anomaly": 2,
+      "combine_types": false
+    }
+  }
+}

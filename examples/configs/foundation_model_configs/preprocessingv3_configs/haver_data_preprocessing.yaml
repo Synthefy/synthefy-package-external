@@ -1,0 +1,58 @@
+input_data: [
+    "/home/synthefy/data/fmv3_univariate/haver/ALPMED",
+    "/home/synthefy/data/fmv3_univariate/haver/AMECO",
+    "/home/synthefy/data/fmv3_univariate/haver/ANZ", 
+    "/home/synthefy/data/fmv3_univariate/haver/BENELUX",
+    "/home/synthefy/data/fmv3_univariate/haver/CANADA",
+    "/home/synthefy/data/fmv3_univariate/haver/EMERGE",
+    "/home/synthefy/data/fmv3_univariate/haver/EMERGECW",
+    "/home/synthefy/data/fmv3_univariate/haver/EMERGELA",
+    "/home/synthefy/data/fmv3_univariate/haver/EMERGEMA", 
+    "/home/synthefy/data/fmv3_univariate/haver/EMERGEPR",
+    "/home/synthefy/data/fmv3_univariate/haver/ESG",
+    "/home/synthefy/data/fmv3_univariate/haver/EUDATA",
+    "/home/synthefy/data/fmv3_univariate/haver/EUGOV",
+    "/home/synthefy/data/fmv3_univariate/haver/EUINT",
+    "/home/synthefy/data/fmv3_univariate/haver/EULABOR",
+    "/home/synthefy/data/fmv3_univariate/haver/EUNA",
+    "/home/synthefy/data/fmv3_univariate/haver/EUPOP",
+    "/home/synthefy/data/fmv3_univariate/haver/EUSEC",
+    "/home/synthefy/data/fmv3_univariate/haver/EUSRVYS",
+    "/home/synthefy/data/fmv3_univariate/haver/EUTRADE",
+    "/home/synthefy/data/fmv3_univariate/haver/FRANCE",
+    "/home/synthefy/data/fmv3_univariate/haver/G10",
+    "/home/synthefy/data/fmv3_univariate/haver/GERMANY",
+    "/home/synthefy/data/fmv3_univariate/haver/INTDAILY",
+    "/home/synthefy/data/fmv3_univariate/haver/INTSRVYS",
+    "/home/synthefy/data/fmv3_univariate/haver/INTWKLY",
+    "/home/synthefy/data/fmv3_univariate/haver/IRELAND",
+    "/home/synthefy/data/fmv3_univariate/haver/ITALY",
+    "/home/synthefy/data/fmv3_univariate/haver/JAPAN",
+    "/home/synthefy/data/fmv3_univariate/haver/NORDIC",
+    "/home/synthefy/data/fmv3_univariate/haver/SPAIN",
+    "/home/synthefy/data/fmv3_univariate/haver/UK",
+    "/home/synthefy/data/fmv3_univariate/haver/USECON"
+]
+
+output_location: "/home/synthefy/data/fmv3_datasets/haver_6M"
+
+shard_size: 5000
+
+blind_percentage: 0.05
+seed: 12
+
+split: "pretrain"
+device: "cuda"
+num_workers: 32
+
+compute_timeseries_shards: true
+text_embed: false
+compute_cutoff_date_mapping: false
+cutoff_date: "2021-06-01"
+
+use_number: -1
+
+relation_constructor: "haver_tree"
+# num_classes: 50 # For random and k-means sampling
+self_sampling_probability: 0.2 # For haver tree sampling
+relation_level: 0 # 0 for first level, 1 for second level, etc.

@@ -1,0 +1,114 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: rrest
+  time_series_length: 256
+  required_time_series_length: 256
+  num_channels: 1
+  num_discrete_conditions: 3
+  num_discrete_labels: 10
+  num_continuous_labels: 3
+  num_timestamp_labels: 0
+  use_timestamp: False
+  latent_dim: 128
+  discrete_condition_embedding_dim: 128
+  batch_size: 128
+  num_workers: 32
+  # constraints: ["argmax", "max and argmax", "argmin", "min and argmin"]
+
+
+denoiser_config:
+  denoiser_name: "diffusion_transformer"
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 12
+  dropout_pos_enc: 0.2
+  use_metadata: false
+  use_periodic_projection: true
+  patch_len: 32
+  stride: 32
+  metadata_embedding_dim: 32
+
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: synthesis_rrest
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  inference_seed: 10
+
+training_config:
+  max_epochs: 1000
+  n_plots: 10
+  auto_lr_find: True
+  check_val_every_n_epoch: 10
+  check_test_every_n_epoch: 10
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "ddp_find_unused_parameters_true"
+
+
+#for evaluation TRTR (train real, test real), TSTR (train synthetic, test real), TRSTR (train real, synthetic, test synthetic)
+tstr_config:
+  classification_or_regression: "regression"
+
+  #only classification is supported for now
+  synthetic_or_original_or_custom: "custom"
+  train_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/rrest/Time_Series_Diffusion_Training/synthesis_rrest/train_dataset/
+      synthetic_or_original: "synthetic"
+
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/rrest/Time_Series_Diffusion_Training/synthesis_rrest/train_dataset/
+      synthetic_or_original: "original"
+
+  val_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/rrest/Time_Series_Diffusion_Training/synthesis_rrest/val_dataset/
+      synthetic_or_original: "original"
+
+  test_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/rrest/Time_Series_Diffusion_Training/synthesis_rrest/test_dataset/
+      synthetic_or_original: "original"
+
+  classifier:
+      model_name: resnet1d50
+
+  regressor:
+    model_name: resnet1d50
+
+  device: cuda
+  seed: 42
+  num_workers: 4
+  training:
+      learning_rate: 1e-3
+      max_epochs: 1000
+      log_dir: /tmp/rrest_tstr_training
+      check_val_every_n_epoch: 10
+      check_test_every_n_epoch: 10
+      num_devices: 1
+
+  dataset:
+    #TODO remove this redundancy
+    num_channels: 1
+    time_series_length: 256
+    required_time_series_length: 256
+    use_reduced_horizon: False # turn this to True when you want to use required_time_series_length as the features instead of time_series_length
+    batch_size: 2048
+
+    #classification:
+    multi_label: False
+    classification_start_index: 0  # Check the output JSON file $SYNTHEFY_DATASETS_BASE/rrest/discrete_windows_columns.json for column indices (in this case, we are doing skin color classification based on the time series data)
+    classification_inclusive_end_index: 2 # Note - this is inclusive
+    classification_use_condition_input: False
+
+    #regression:
+    index_of_interest: 1 #integer - up to num_continuous_labels (check the preprocess config file for the index)
+    use_condition_input: True
+    continuous_input_channels: [0,] #up to num_continuous_labels
+    discrete_input_channels: [0,1,2] # up to num_discrete_conditions

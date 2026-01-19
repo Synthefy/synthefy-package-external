@@ -1,0 +1,47 @@
+
+bucket_name: 'synthefy-prod-logs'
+metadata_datasets_bucket: 'synthefy-foundation-model-metadata-datasets'
+metadata_index_host: "https://metadata-embeddings-v2-qujk18r.svc.aped-4627-b74a.pinecone.io"
+json_save_path: '/tmp'
+
+dataset_path: ${SYNTHEFY_DATASETS_BASE}
+
+max_file_size: 1_000_000_000 # 1GB in bytes
+
+preprocess_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/preprocessing_configs/config_${dataset_name}_preprocessing.json
+preprocessed_data_path: ${SYNTHEFY_DATASETS_BASE}/${dataset_name}
+
+synthesis_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/synthesis_configs/config_${dataset_name}_synthesis.yaml
+synthesis_model_path: ${SYNTHEFY_DATASETS_BASE}/training_logs/${dataset_name}/Time_Series_Diffusion_Training/synthesis_${dataset_name}/checkpoints/best_model.ckpt
+
+forecast_config_path: ${SYNTHEFY_PACKAGE_BASE}/examples/configs/forecast_configs/config_${dataset_name}_forecasting.yaml
+forecast_model_path: ${SYNTHEFY_DATASETS_BASE}/training_logs/${dataset_name}/Time_Series_Diffusion_Training/synthefy_forecasting_model_v1_${dataset_name}/checkpoints/best_model.ckpt
+
+synthefy_foundation_model_path: s3://synthefy-checkpoints/prod-checkpoints/synthefy-foundation-model/
+
+
+show_gt_synthesis_timeseries: true
+show_gt_forecast_timeseries: true
+only_include_forecast_in_streaming_response: true
+return_only_synthetic_in_streaming_response: true
+
+anomaly_threshold: 3.0
+
+window_naming_config:
+  pretrained_anomaly_prefix: 'Failure'
+  synthesis_prefix: 'Synthetic'
+  forecast_prefix: 'Forecast'
+  search_prefix: 'Similar Window'
+  view_prefix: 'Window'
+
+use_llm_generation_in_metadata_recommendations: 1
+number_of_vectors_to_retrieve_before_generation_scale_factor: 2
+
+
+api_usage_bigquery_metrics:
+  storage: "bigquery"
+  project_id: raimi-test-454417
+  dataset_id: metrics_prod
+  table_id: api_events_raw
+
+

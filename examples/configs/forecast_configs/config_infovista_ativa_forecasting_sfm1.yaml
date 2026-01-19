@@ -1,0 +1,49 @@
+device: cuda
+task: forecast
+dataset_config:
+  dataset_name: infovista_ativa
+  num_channels: 3
+  forecast_length: 50
+  time_series_length: 100
+  required_time_series_length: 100
+  num_discrete_conditions: 8
+  num_continuous_labels: 4
+  num_discrete_labels: 1
+  discrete_condition_embedding_dim: 64
+  latent_dim: 64
+  batch_size: 16
+  use_metadata: true
+  num_timestamp_labels: 4
+denoiser_config:
+  denoiser_name: synthefy_forecasting_model_v1
+  d_model: 256
+  patch_len: 16
+  stride: 8
+  dropout: 0.1
+  e_layers: 6
+  d_layers: 1
+  d_ff: 512
+  n_heads: 8
+  activation: gelu
+  factor: 3
+  output_attention: true
+  use_metadata: true
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+execution_config:
+  save_path: training_logs
+  run_name: forecast_infovista_ativa
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+training_config:
+  max_epochs: 30
+  learning_rate: 0.0001
+  n_plots: 4
+  auto_lr_find: true
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: auto

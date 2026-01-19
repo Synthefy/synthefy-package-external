@@ -1,0 +1,69 @@
+device: "cuda"
+task: "forecast"
+
+# history_length = time_series_length - forecast_length
+dataset_config:
+  dataset_name: se_emsx
+  time_series_length: 192
+  num_channels: 2
+  num_discrete_conditions: 70
+  num_discrete_labels: 1  # Look for `num_original_discrete` in the preprocess stdout.
+  num_continuous_labels: 9
+  latent_dim: 64
+  discrete_condition_embedding_dim: 128
+  forecast_length: 96
+ 
+  num_timestamp_labels: 4
+  use_timestamp: False  # Intentionally disabling timestamp encoder
+  use_metadata: True
+  batch_size: 8
+
+denoiser_config:
+  denoiser_name: "synthefy_forecasting_model_v2a"
+  d_model: 256 
+  patch_len: 16
+  stride: 8
+  dropout: 0.1
+  e_layers: 6
+  d_layers: 1
+  d_ff: 512
+  n_heads: 8
+  activation: "gelu"
+  factor: 3
+  output_attention: True
+  use_metadata: True
+  use_probabilistic_forecast: False
+
+  # copied from config_se_emsx_synthesis.yaml
+  # just for compatibility when using forecast_via_diffusion, which actually loads a denoiser
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 10
+  dropout_pos_enc: 0.2
+  use_metadata: True
+
+metadata_encoder_config:
+  use_sa_layer: True
+  channels: ${denoiser_config.d_model}
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: "synthefy_forecasting_model_v2a_se_emsx"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  remove_outliers_from_plot: True
+
+training_config:
+  max_epochs: 10
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

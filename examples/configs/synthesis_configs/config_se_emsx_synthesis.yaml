@@ -1,0 +1,49 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: se_emsx
+  time_series_length: 192 
+  num_channels: 2
+  num_discrete_conditions: 70
+  num_discrete_labels: 1  # Look for `num_original_discrete` in the preprocess stdout.
+  num_continuous_labels: 9
+  latent_dim: 64  # continous
+  discrete_condition_embedding_dim: 128  # Do we want to use discrete encoder here?
+
+  num_timestamp_labels: 4  # 0 in config_forecasting_eval_air_quality.yaml  # we are not using the timestamp column?
+  # use_metadata: True
+  batch_size: 8
+
+denoiser_config:
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 10
+  dropout_pos_enc: 0.2 
+  use_metadata: True
+
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: probabilistic_forecasting
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  remove_outliers_from_plot: True
+
+# Same as config_decoder_forecasting_air_quality.yaml#L57
+training_config:
+  max_epochs: 3000
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 5
+  check_test_every_n_epoch: 5
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

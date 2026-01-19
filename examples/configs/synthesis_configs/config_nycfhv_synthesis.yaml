@@ -1,0 +1,57 @@
+device: "cuda"
+task: "synthesis"
+
+# {'time_series_length': 48, 'num_channels': 1, 'num_discrete_conditions': 273, 'num_continuous_labels': 4, 'num_timestamp_labels': 3}
+
+dataset_config:
+  dataset_name: nycfhv
+  time_series_length: 48
+  num_channels: 1
+  num_discrete_conditions: 273
+  num_discrete_labels: 1  # Look for `num_original_discrete` in the preprocess stdout.
+  num_continuous_labels: 4
+  latent_dim: 64  # continous
+  discrete_condition_embedding_dim: 128  # Do we want to use discrete encoder here?
+
+  # num_timestamp_labels: 3  # 0 in config_forecasting_eval_air_quality.yaml  # we are not using the timestamp column?
+  # use_metadata: True
+  batch_size: 256
+
+denoiser_config:
+  d_model: 256 
+  patch_len: 16
+  stride: 8 # 8 in config_forecasting_eval_air_quality.yaml
+  dropout: 0.1
+  e_layers: 6
+  d_layers: 1
+  d_ff: 512
+  n_heads: 8
+  activation: "gelu"
+  factor: 3
+  output_attention: True
+  use_metadata: True
+
+# Same as config_forecasting_eval_air_quality.yaml#L87
+metadata_encoder_config:
+  use_sa_layer: True
+  channels: ${denoiser_config.d_model}  # TODO: make sure this is actually being used...
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: "synthesis_nycfhv"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+# Same as config_decoder_forecasting_air_quality.yaml#L57
+training_config:
+  max_epochs: 30
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

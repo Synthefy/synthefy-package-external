@@ -1,0 +1,86 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": false,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "infovista_halo/halo_pm_data_sip_calls_SepOctNov24.parquet",
+  "freq": "1M",
+  "window_size": 144,
+  "stride": 144,
+  "timestamps_col": [
+    "timestamp"
+  ],
+  "group_labels": {
+    "cols": [
+      "mo_name"
+    ],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "common_call_volume_high",
+      "common_call_asr",
+      "common_call_aloc",
+      "failed_emergency_call",
+      "common_call_failure_setup_rate",
+      "common_average_pdd",
+      "common_average_jitter",
+      "common_average_min_mos",
+      "sip_ner",
+      "sip_weighted_rfactor",
+      "sip_4xx_rate",
+      "sip_5xx_rate",
+      "sip_6xx_rate",
+      "media_packets_lost_ratio"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [],
+    "scalers": {}
+  },
+  "anomaly_detection": {
+    "settings": {
+      "num_anomalies_limit": 50,
+      "min_anomaly_score": null,
+      "n_jobs": -1
+    },
+    "model": {
+      "type": "synthefy_anomaly_detector_v2",
+      "params": {
+        "daily_seasonality": true,
+        "weekly_seasonality": true,
+        "yearly_seasonality": false,
+        "interval_width": 0.95
+      }
+    },
+    "frequency": {
+      "type": "5T",
+      "windows": {
+        "volatility": 24,
+        "pattern": 168,
+        "min_points": 50,
+        "baseline_multiplier": 7
+      }
+    },
+    "sd_thresholds": {
+      "peak": 2.5,
+      "scattered": 2.5,
+      "out_of_pattern": 2.5
+    },
+    "concurrent_anomalies": {
+      "enabled": true,
+      "time_window": "1H",
+      "min_kpis_for_concurrent_anomaly": 10,
+      "combine_types": false
+    }
+  }
+}

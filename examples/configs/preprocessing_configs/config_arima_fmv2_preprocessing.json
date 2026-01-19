@@ -1,0 +1,22 @@
+{
+    "dataset_name": "arima",
+    "filename": "/home/ubuntu/arima_dataset.parquet",
+    "timestamps_col": [
+        "timestamp"
+    ],
+    "group_labels": [],
+    "timeseries": [
+        "y_0"
+    ],
+    "continuous": [
+        "m_0",
+        "m_1",
+        "m_2",
+        "m_3"
+    ],
+    "tags": [
+        "arima"
+    ],
+    "domain": "synthetic",
+    "description": "Synthetic ARIMA dataset"
+}

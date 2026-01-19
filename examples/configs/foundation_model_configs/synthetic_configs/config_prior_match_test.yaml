@@ -1,0 +1,171 @@
+# TabICL Training Configuration
+
+# # Wandb Config
+# wandb_log: false
+# wandb_project: TabICL
+# wandb_name: null
+# wandb_id: null
+# wandb_dir: null
+# wandb_mode: offline
+
+# # Training Config
+# device: cuda:4  # Example: Using GPU 4 for model training
+# dtype: float32
+# np_seed: 42
+# torch_seed: 42
+# max_steps: 60000
+# batch_size: 512
+# micro_batch_size: 8
+
+# # Optimization Config
+# lr: 0.0001  # 1e-4
+# scheduler: cosine_warmup
+# warmup_proportion: 0.2
+# warmup_steps: 2000
+# gradient_clipping: 1.0
+# weight_decay: 0
+# cosine_num_cycles: 1
+# cosine_amplitude_decay: 1.0
+# cosine_lr_end: 0
+# poly_decay_lr_end: 0.0000001  # 1e-7
+# poly_decay_power: 1.0
+
+# Prior Dataset Config
+prior_dir:  /workspace/data/tabicl_prior_data/tabicl_tabular_cls/ # null for generating on the fly
+load_prior_start: 0
+delete_after_load: false
+batch_size_per_gp: 4
+min_features: 5
+max_features: 100
+max_classes: 10
+min_seq_len: null
+max_seq_len: 1024
+log_seq_len: false
+seq_len_per_gp: false
+min_train_size: 0.1
+max_train_size: 0.9
+replay_small: false
+prior_type: mix_scm
+prior_device: cuda:5  # Example: Using GPU 5 for prior data generation
+is_regression: false  # Set to true for regression tasks
+row_missing_prob: 0.0
+column_has_missing_prob: 0.0
+dataset_length: 5
+
+# SCM Prior Config - Fixed Hyperparameters
+scm_mix_probs: [0.7, 0.3]  # Mix probabilities for MLP vs Tree SCM
+scm_tree_model: xgboost  # Tree model type for TreeSCM
+scm_tree_depth_lambda: 0.5  # Lambda for tree depth sampling
+scm_tree_n_estimators_lambda: 0.5  # Lambda for number of estimators sampling
+scm_balanced: false  # Whether to balance classes
+scm_multiclass_ordered_prob: 0.0  # Probability of ordered multiclass
+scm_cat_prob: 0.2  # Probability of categorical features
+scm_max_categories: .inf  # Maximum number of categories
+scm_scale_by_max_features: false  # Whether to scale by max features
+scm_permute_features: true  # Whether to permute features
+scm_permute_labels: true  # Whether to permute labels
+
+# SCM Prior Config - Sampled Hyperparameters
+scm_multiclass_type:
+  distribution: meta_choice
+  choice_values: [value, rank]
+# scm_mlp_activations Will use default from TabICLConfig
+scm_block_wise_dropout:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_mlp_dropout_prob:
+  distribution: meta_beta
+  scale: 0.9
+  min: 0.1
+  max: 5.0
+scm_is_causal:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_num_causes:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 12
+  min_mean: 1
+  round: true
+  lower_bound: 1
+scm_y_is_effect:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_in_clique:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_sort_features:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_num_layers:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 6
+  min_mean: 1
+  round: true
+  lower_bound: 2
+scm_hidden_dim:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 130
+  min_mean: 5
+  round: true
+  lower_bound: 4
+scm_init_std:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 10.0
+  min_mean: 0.01
+  round: false
+  lower_bound: 0.0
+scm_noise_std:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 0.3
+  min_mean: 0.0001
+  round: false
+  lower_bound: 0.0
+scm_used_sampler:
+  distribution: meta_choice
+  choice_values: [ts]
+scm_sampling:
+  distribution: meta_choice
+  choice_values: [mixed_series]
+scm_pre_sample_cause_stats:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_pre_sample_noise_std:
+  distribution: meta_choice
+  choice_values: [true, false]
+
+# # Model Architecture Config
+# amp: true
+# model_compile: false
+
+# # Column Embedding Config
+# embed_dim: 128
+# col_num_blocks: 3
+# col_nhead: 4
+# col_num_inds: 128
+# freeze_col: false
+
+# # Row Interaction Config
+# row_num_blocks: 3
+# row_nhead: 8
+# row_num_cls: 4
+# row_rope_base: 100000
+# freeze_row: false
+
+# # ICL Config
+# icl_num_blocks: 12
+# icl_nhead: 4
+# freeze_icl: false
+
+# # Shared Architecture Config
+# ff_factor: 2
+# dropout: 0.0
+# activation: gelu
+# norm_first: true
+
+# # Checkpointing
+# checkpoint_dir: /workspace/data/tabicl_exps/tabicl_tabular_cls/  # Example checkpoint directory
+# save_temp_every: 50
+# save_perm_every: 5000
+# max_checkpoints: 5
+# checkpoint_path: null
+# only_load_model: false

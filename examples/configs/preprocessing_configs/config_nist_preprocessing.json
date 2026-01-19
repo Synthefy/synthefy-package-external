@@ -1,0 +1,48 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": true,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "nist/every_20_pulsewidths.parquet",
+  "window_size": 128,
+  "stride": 64,
+  "timestamps_col": [],
+  "group_labels": {
+    "cols": [
+      "SUID"
+    ],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "real",
+      "imag"
+    ],
+    "scalers": {
+      "imag": {
+        "scaler_type": "standard"
+      }
+    }
+  },
+  "discrete": {
+    "cols": [
+      "ChirpDirection"
+    ],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [
+      "time",
+      "ChirpWidth"
+    ],
+    "scalers": {
+      "time": {
+        "scaler_type": "minmax"
+      }
+    }
+  }
+}

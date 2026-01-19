@@ -1,0 +1,40 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": true,
+  "add_fourier": false,
+  "fourier_params": {
+    "num_coefficients": 25,
+    "label_num": 2
+  },
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "tektronix_bitstream/bitstream_chunk.parquet",
+  "channel_label": 2,
+  "timestamps_col": [],
+  "window_size": 60,
+  "stride": 6,
+  "group_labels": {
+    "cols": [],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "timeseries"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [
+      "tektronix_label"
+    ],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [],
+    "scalers": {}
+  }
+}

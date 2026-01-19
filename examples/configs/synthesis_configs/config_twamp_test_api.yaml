@@ -1,0 +1,21 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  num_channels: 5
+  time_series_length: 96
+  required_time_series_length: 96
+  num_discrete_conditions: 310
+  num_continuous_labels: 20
+  batch_size: 1
+
+execution_config:
+  save_path: training_logs
+  run_name: march_20_2024
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  max_epochs: 1
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1

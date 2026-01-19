@@ -1,0 +1,57 @@
+update_frequency: 1000
+max_steps: 30000
+min_loss: -0.5
+max_loss: 0.6
+floor_ratio: true
+max_epochs: -1
+curriculum_type: floor_adaptive
+curriculum_features:
+  min_train_size:
+    min_step_size: 0.02
+    min: 0.98
+    max: 0.5
+    delay_count: 5000
+  dataset_has_lag:
+    min_step_size: 0.02
+    min: 0.0
+    max: 0.5
+    delay_count: 5000
+  scm_num_layers:
+    distribution: meta_trunc_norm_log_scaled
+    min_max_mean: 0.1
+    max_max_mean: 1.5
+    min_min_mean: 0.1
+    max_min_mean: 0.1
+    min_lower_bound: 2
+    max_lower_bound: 3
+  scm_num_causes:
+    distribution: meta_trunc_norm_log_scaled
+    min_max_mean: 1
+    max_max_mean: 11
+    min_min_mean: 1
+    max_min_mean: 4
+    min_lower_bound: 1
+    max_lower_bound: 5
+  # scm_hidden_dim:
+  #   distribution: meta_trunc_norm_log_scaled
+  #   min_max_mean: 0.1
+  #   max_max_mean: 0.3
+  #   min_min_mean: 0.1
+  #   max_min_mean: 0.1
+  #   min_lower_bound: 10
+  #   max_lower_bound: 50
+  scm_noise_std:
+    distribution: meta_trunc_norm_log_scaled
+    min_max_mean: 0.1
+    max_max_mean: 0.4
+    min_min_mean: 0.0001
+    max_min_mean: 0.0001
+    min_lower_bound: 0.0
+    max_lower_bound: 0.0
+    delay_count: 0
+assignment_features:
+  mask_mixing_rates:
+    min_step_size: 0.02
+    min: [1.0, 0.1, 0.1, 0.00] # assuming using rand, row, block, train_test_block
+    max: [1.0, 0.8, 0.8, 0.2]
+    delay_count: 0

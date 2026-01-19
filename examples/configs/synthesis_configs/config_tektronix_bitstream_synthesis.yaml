@@ -1,0 +1,58 @@
+device: cuda
+task: synthesis
+
+dataset_config:
+  dataset_name: tektronix_bitstream
+  num_channels: 1
+  time_series_length: 60
+  required_time_series_length: 60
+  num_discrete_conditions: 4
+  num_continuous_labels: 0
+  num_discrete_labels: 1
+  discrete_condition_embedding_dim: 64
+  latent_dim: 64
+  batch_size: 16
+  use_metadata: true
+  num_timestamp_labels: 0
+
+  # # Constraints related
+  # use_constraints: False
+  # extract_equality_constraints_from_windows: False
+  # projection_during_synthesis: clipping
+  # # projection_during_synthesis: strict
+  # constraints: ["min", "max"]
+  # # constraints: ["argmax", "max and argmax", "argmin", "min and argmin"]
+
+denoiser_config:
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 12
+  dropout_pos_enc: 0.2
+  use_metadata: true
+  use_periodic_projection: true
+
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: synthesis_tektronix_bitstream
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  inference_seed: 10
+
+training_config:
+  max_epochs: 500
+  learning_rate: 0.0001
+  n_plots: 4
+  auto_lr_find: true
+  check_val_every_n_epoch: 5
+  check_test_every_n_epoch: 5
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "ddp_find_unused_parameters_true"
+  save_all_checkpoints: true

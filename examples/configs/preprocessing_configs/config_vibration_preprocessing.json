@@ -1,0 +1,38 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": true,
+    "add_lag_data": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.65,
+        "val": 0.10
+    },
+    "filename": "vibration/vibration_data_downsampled_no_custom_split.parquet",
+    "window_size": 512,
+    "stride": 512,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "label"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "Vibration_1",
+            "Vibration_2",
+            "Vibration_3"
+        ]
+    },
+    "discrete": {
+        "cols": [],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "V_in",
+            "Measured_RPM"
+        ],
+        "scalers": {}
+    }
+}

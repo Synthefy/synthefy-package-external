@@ -1,0 +1,26 @@
+---
+standardized_dataset_category_names: 
+  - fred_data
+meta_standardized_dataset_category_names:
+  - fred_data
+time_series_filters:
+  - title: Commodities
+  - frequency: Monthly
+  - length_geq: 100
+post_filters:
+  - length_geq: 100
+metadata_filters:
+  - title: CPI
+  - frequency: Monthly
+  - length_geq: 200
+metadata_n_longest: 20
+metadata_post_filters:
+  - length_geq: 100
+input_data_dir: /home/data/standardized/
+output_dir: /home/data/enriched_datasets/
+outname: fred_monthly_commodities_CPI
+nan_fill_frequency: true
+time_period: 
+  start: 1980-01-01
+  end: 2024-12-01
+... 

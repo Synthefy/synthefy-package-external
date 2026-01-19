@@ -1,0 +1,63 @@
+```python
+
+import json
+
+import httpx
+import pandas as pd
+
+DATASET_NAME = "{dataset_name}"
+GROUP_LABEL_COLUMNS = {group_labels_cols}
+TIMESTAMP_COLUMN = {timestamps_col}
+WINDOW_SIZE = {window_size}
+TASK = "{task}"
+TRAINING_JOB_ID = "{training_job_id}"
+USER_ID = "{user_id}"
+
+X_API_KEY = "XXXX-XXXX"  # input your API key here
+
+# Load your dataset and convert to json for the request - Load your own dataset here
+# This dataset does not have to be the "base" dataset used to train the model
+# You can add a more recent dataset, as long as it is in the same format as the base dataset
+df = pd.read_parquet("<REPLACE_IT_WITH_YOUR_DATASET_FILE_PATH>")
+
+# You should not need to change anything below here.
+BASE_URL = "https://prod.synthefy.com"
+client = httpx.Client(base_url=BASE_URL, timeout=30.0)
+ENDPOINT = f"/api/{{TASK}}/{{USER_ID}}/{{DATASET_NAME}}/{{TRAINING_JOB_ID}}/stream"
+
+# Only sort if timestamp column exists and has at least some non-null values
+if (
+    TIMESTAMP_COLUMN
+    and TIMESTAMP_COLUMN[0] in df.columns
+    and not df[TIMESTAMP_COLUMN[0]].isnull().all()
+):
+    sort_columns = GROUP_LABEL_COLUMNS + TIMESTAMP_COLUMN
+    df = df.sort_values(by=sort_columns)
+
+
+# take only the first `window_size` rows - the API only supports window_size input
+# fill missing values with the last valid value
+df = df.iloc[:WINDOW_SIZE].reset_index(drop=True).ffill()
+
+# check the make sure all the group label columns are the same -> required for the API
+if GROUP_LABEL_COLUMNS:
+    assert (
+        df[GROUP_LABEL_COLUMNS].nunique().eq(1).all()
+    ), "All the group label columns must be the same - check your input data"
+
+
+json_for_request = json.loads(df.to_json())
+
+# you can change the task to "forecast" or "synthesis"
+response = client.post(
+    ENDPOINT,
+    json=json_for_request,
+    headers={{"X-API-Key": X_API_KEY}},
+)
+
+if response.status_code != 200:
+    raise Exception(f"Error: {{response.status_code}} - {{response.text}}")
+
+pred_df = pd.DataFrame(response.json())
+
+```

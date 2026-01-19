@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/synthefy_dataset_utils"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project]
+name = "synthefy-dataset-utils"
+version = "0.1.0"
+description = "Dataset utilities for sharded columnar storage"
+authors = [
+    { name = "Aditya Narayanan", email = "aditya.narayanan@synthefy.com" },
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "tqdm>=4.67.1",
+]
+
+[project.optional-dependencies]
+convert = ["pandas", "pyarrow"]
+dev = ["pytest", "black", "isort", "flake8", "pandas", "pyarrow"]
+
+[project.urls]
+Homepage = "https://github.com/synthefy/synthefy-package"
+Repository = "https://github.com/synthefy/synthefy-package"
+Issues = "https://github.com/synthefy/synthefy-package/issues"
+
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 88

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparison Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h2,
+        h3 {
+            color: #3e3e3e;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9fafe;
+            border: 1px solid #dfe1e6;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .toc h1 {
+            font-size: 1.8em;
+            color: #444;
+        }
+
+        .toc ol {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: section;
+        }
+
+        .toc ol>li {
+            counter-increment: section;
+            margin-bottom: 15px;
+        }
+
+        .toc ol>li::before {
+            content: counters(section, ".") " ";
+            font-weight: bold;
+            color: #333;
+            margin-right: 8px;
+        }
+
+        .toc ol li a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .toc ol li a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #e9ecef;
+            color: #555;
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Comparison Report</h1>
+
+        <div class="toc">
+            <h1>Table of Contents</h1>
+            <ol>
+                <li><a href="#section-mse">MSE Box Plot</a></li>
+                <li><a href="#section-hist">All Metrics Histogram</a></li>
+                {% for section in sections %}
+                <li><a href="#section-{{ section.id }}">{{ section.title }}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <div id="section-mse" class="section">
+            <h2>MSE Box Plot</h2>
+            <img src="{{ mse_plot_path }}" alt="MSE Box Plot">
+        </div>
+
+        <div id="section-hist" class="section">
+            <h2>All Metrics Histogram</h2>
+            <img src="{{ hist_plot_path }}" alt="Histogram Plot">
+        </div>
+
+        {% for section in sections %}
+        <div id="section-{{ sections.id }}" class="section">
+            <h2>{{ section.title }}</h2>
+            {% for img in section.images %}
+            <img src="{{ img.path }}" alt="{{ img.title }}">
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <footer>
+        <p><strong>Comparison Report</strong>.</p>
+    </footer>
+</body>
+
+</html>

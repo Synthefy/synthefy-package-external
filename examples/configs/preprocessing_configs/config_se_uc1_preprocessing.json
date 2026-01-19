@@ -1,0 +1,64 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.8,
+        "val": 0.1
+    },
+    "filename": "se_UC1device_lag_256/D65AP7_F330_F500_rul_lag256.parquet",
+    "freq": "1M",
+    "window_size": 256,
+    "stride": 24,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "ObsIndex"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "phase1_energie_darc_total",
+            "phase1_temps_darc_de_rebond",
+            "phase1_temps_de_fermeture",
+            "phase1_diff_temps_fermeture",
+            "phase1_temps_douverture",
+            "phase1_pourcent_arc_fermeture",
+            "phase2_energie_darc_total",
+            "phase3_tension_appliquée_f",
+            "phase1_intégrale_de_i²_f"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "reference"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "time_since_inception",
+            "rul",
+            "phase1_energie_darc_total_lag1",
+            "phase1_temps_darc_de_rebond_lag1",
+            "phase1_temps_de_fermeture_lag1",
+            "phase1_diff_temps_fermeture_lag1",
+            "phase1_temps_douverture_lag1",
+            "phase1_pourcent_arc_fermeture_lag1",
+            "phase2_energie_darc_total_lag1",
+            "phase3_tension_appliquée_f_lag1",
+            "phase1_intégrale_de_i²_f_lag1"
+        ],
+        "scalers": {
+            "time_since_inception": {
+                "scaler_type": "none"
+            },
+            "rul": {
+                "scaler_type": "none"
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": true,
+    "window_from_beginning": false,
+    "shuffle": false,
+    "train_val_split": {
+        "train": 0.8,
+        "val": 0.1
+    },
+    "filename": "electricity_icml/electricity_dataset_icml.parquet",
+    "window_size": 96,
+    "stride": 96,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "userid"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "power_consumption"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "day",
+            "month",
+            "year"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [],
+        "scalers": {}
+    }
+}

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ model_name }} Post Process Report: {{ dataset_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            padding: 0;
+            border: 2px solid #ccc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #834c69;
+        }
+
+        h3 {
+            color: #691303;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            max-width: 1400px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9fafe;
+            border: 1px solid #dfe1e6;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 40px auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #e9ecef;
+            color: #555;
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .toc {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .toc h1 {
+            font-size: 1.8em;
+            color: #444;
+        }
+
+        .toc ol {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: section;
+        }
+
+        .toc ol>li {
+            counter-increment: section;
+            margin-bottom: 15px;
+        }
+
+        .toc ol>li::before {
+            content: counters(section, ".") " ";
+            font-weight: bold;
+            color: #333;
+            margin-right: 8px;
+        }
+
+        .toc ol li a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .toc ol li a:hover {
+            text-decoration: underline;
+        }
+
+        .toc ol ol {
+            margin-left: 20px;
+            counter-reset: subsection;
+            margin-top: 10px;
+        }
+
+        .toc ol ol>li {
+            margin-bottom: 8px;
+            counter-increment: subsection;
+        }
+
+        .toc ol ol>li::before {
+            content: counters(section, ".") "." counters(subsection, ".") " ";
+            font-weight: normal;
+            color: #007bff;
+        }
+        
+        /* Ensure tables and content are properly aligned */
+        div[width="100%"] {
+            width: 100% !important;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ model_name }} Post Process Report: {{ dataset_name }}</h1>
+
+        {% if learning_section is not none %}
+        <div class="section">
+            <h2>{{ learning_section.title }}</h2>
+            <p>
+                <strong>What to look for:</strong> Training, validation, and test losses decrease and stabilize, indicating good convergence; ideally, train, validation, and test losses should not significantly increase after initial decline to demonstrate robust learning without overfitting.
+            </p>
+            <img src="data:image/png;base64,{{ learning_section.image.base64 }}" alt="{{ learning_section.image.title }}">
+        </div>
+        {% endif %}
+
+        <div class="section">
+        {% for subsection in metrics_table_section.subsections %}
+        <p>
+            <strong>What to look for:</strong> The smaller the values, the better.
+        </p>
+        <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+        <div style="width:100%; overflow-x:auto; border:none;">{{ subsection.table.content | safe }}</div>
+        {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2>{{ violin_section.title }}</h2>
+            <p>
+                <strong>What to look for:</strong> The closer the distributions of Ground Truth and {{ label }} data match in shape and spread, the better.
+            </p>
+            {% for subsection in violin_section.subsections %}
+            <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+            <img src="data:image/png;base64,{{ subsection.image.base64 }}" alt="{{ subsection.image.title }}">
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2><a name="{{ line_section.id }}">{{ line_section.title }}</a></h2>
+            <p>
+                <strong>What to look for:</strong> The closer the {{label}} values are to the Ground Truth and the less the error region is, the better. Usually having an exact match is very difficult.
+            </p>
+            {% for subsection in line_section.subsections %}
+            <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+            {% for img in subsection.images %}
+            <img src="data:image/png;base64,{{ img.base64 }}" alt="{{ img.title }}">
+            {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2><a name="{{ covariance_matrix_section.id }}">{{ covariance_matrix_section.title }}</a></h2>
+            <p>
+                <strong>What to look for:</strong> The more similar the first covariance matrix (covariance between real timeseries columns and continuous metadata columns) is to the second covariance matrix (covariance between synthetic timeseries columns and continuous metadata columns), the better.
+            </p>
+            {% for subsection in covariance_matrix_section.subsections %}
+            <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+            <img src="data:image/png;base64,{{ subsection.image.base64 }}" alt="{{ subsection.image.title }}">
+            {% endfor %}
+        </div>
+
+        {# Distribution section is commented out until synthetic vs real time is generated
+        <div class="section"></div>
+        {% for subsection in distribution_section.subsections %}
+        <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+        <div width="100%" style="border:none;">{{ subsection.table.content | safe }}</div>
+        {% endfor %}
+
+        <div class="section"></div>
+        {% for subsection in correlation_section.subsections %}
+        <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+        <div width="100%" style="border:none;">{{ subsection.table.content | safe }}</div>
+        {% endfor %}
+        #}
+    </div>
+
+    {% if include_appendix %}
+    <div class="container">
+        <div class="toc">
+            <h1>Appendix: Table of Contents</h1>
+            <ol>
+                {% for section in toc %}
+                <li><a href="#{{ section.id }}">{{ section.title }}</a>
+                    {% if section.subsections %}
+                    <ol>
+                        {% for subsection in section.subsections %}
+                        <li><a href="#{{ subsection.id }}">{{ subsection.title }}</a></li>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% for section in sections %}
+        <div class="section">
+            <h2><a name="{{ section.id }}">{{ section.title }}</a></h2>
+            <p>
+                <strong>What to look for:</strong> {{ section.description }}
+            </p>
+            {% for subsection in section.subsections %}
+            <h3><a name="{{ subsection.id }}">{{ subsection.title }}</a></h3>
+            {% for img in subsection.images %}
+            <img src="data:image/png;base64,{{ img.base64 }}" alt="{{ img.title }}">
+            {% endfor %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <footer>
+        <p><strong>Postprocessing Report for {{ model_name }} model and {{ dataset_name }} dataset.</strong></p>
+    </footer>
+</body>
+
+</html>

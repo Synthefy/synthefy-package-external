@@ -1,0 +1,39 @@
+{
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": true,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.9,
+        "val": 0.05
+    },
+    "filename": "rrest/rrest-syn.parquet",
+    "window_size": 256,
+    "stride": 32,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "record_id"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "PPG"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "resp_type"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "resp_rate",
+            "heart_rate"
+        ],
+        "scalers": {}
+    }
+}

@@ -1,0 +1,12 @@
+blind_percentage: 0.99
+compute_cutoff_date_mapping: true
+compute_timeseries_shards: true
+cutoff_date: '2021-06-01'
+device: cuda
+input_data: [/home/sai/synthefy_data/gift_eval_processed/hospital/dataset_0]
+num_workers: 2
+output_location: /home/sai/synthefy_data/gift_eval_test_shards/hospital
+seed: 12
+shard_size: 5000
+split: blind
+text_embed: true

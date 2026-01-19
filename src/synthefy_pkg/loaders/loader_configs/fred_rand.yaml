@@ -1,0 +1,21 @@
+---
+standardized_dataset_category_names: 
+  - fred_data
+time_series_filters:
+  - title: Commodities
+  - frequency_geq: Monthly
+  - length_geq: 100
+post_filters:
+  - length_geq: 100
+input_data_dir: /home/data/standardized/
+output_dir: /home/data/enriched_datasets/
+outname: fred_monthly_commodities_randomized
+nan_fill_frequency: true
+time_period: 
+  start: 1980-01-01
+  end: 2024-12-01
+num_datasets_to_save: 1000
+sample_dataset_ratio: 1.0
+num_variates_per_enrich: 20
+num_files_per_subset: 100
+... 

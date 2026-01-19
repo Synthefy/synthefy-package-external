@@ -1,0 +1,16 @@
+---
+  standardized_dataset_category_names: 
+    - ALL
+  time_series_filters:
+    - frequency_geq: Quarterly
+    - length_geq: 128
+  complex_filter: (frequency_geq_Quarterly&length_geq_128)
+  post_filters:
+    - length_geq: 128
+  input_data_dir: /home/data/standardized/
+  output_dir: /home/data/enriched_datasets/
+  nan_fill_frequency: true
+  time_period: 
+    start: 1950-01-01
+    end: 2024-12-31
+...

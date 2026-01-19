@@ -1,0 +1,114 @@
+device: "cuda"
+task: "forecast"
+trainer: "foundation_model"
+save_key: "val_loss" #"val_loss"
+
+# history_length = time_series_length - forecast_length
+dataset_config:
+  dataloader_name: OTFSyntheticDataloader # V3ShardedDataloader
+  dataset_name: synthetic_tabular # haver4M_synthefy250K
+  v3_data_paths: ["/workspace/fmv3_datasets/chronos_1M/fmv3_chronos_all/pretrain/"]
+  prior_config_path: "src/synthefy_pkg/prior/config/synthetic_configs/config_medium_series.yaml"
+  num_channels: 1
+  time_series_length: 768 
+  forecast_length: 384
+  metadata_length: 3460
+  timestamp_start_idx: 3
+  timestamp_end_idx: 2819
+  dataset_description_start_idx: 2819
+  dataset_description_end_idx: 3203
+  continuous_start_idx: 3203
+  continuous_end_idx: 3459
+  dataset_idx_start_idx: 3459
+  dataset_idx_end_idx: 3460
+  text_embedding_dim: 384
+  batch_size: 1
+  accumulate_grad_batches: 32
+  num_timestamp_features: 11
+  num_correlates: 46
+  num_datasets: 10000
+  use_relation_shards: false
+  using_synthetic_data: true
+  num_workers: 16
+  is_regression: true
+  is_tabular: false
+  # curriculum_config_path: "src/synthefy_pkg/prior/config/curriculum_configs/config_adaptive_curr.yaml"
+  mixed_real_synthetic_sampling: false
+  train_as_univariate_model: true
+
+# 170752
+foundation_model_config:
+  model_name: "synthefy_foundation_forecasting_model_v3e"
+  decoder_checkpoint_name: ""
+  decoder_input_patch_len: 32
+  decoder_output_patch_len: 128
+  decoder_num_layers: 15
+  decoder_model_dims: 1024
+  decoder_num_heads: 16
+  use_metadata: true
+  finetune_timesfm_from_beginning: false 
+  finetune_timesfm_after_epochs: 100
+  timeseries_token_dims: 9
+  random_vector_instead_text: false
+  mask_timestamp: false
+  replace_timestamp_with_pos_enc: true
+  use_column_identifier: true
+  position_embedding: none
+  train_epoch_length: 100000
+  val_epoch_length: 1000
+  block_target_mask_range: 8
+  block_target_mask_mean: 48
+  block_mask_num: 1
+  generate_point_forecast: false
+  generate_probabilistic_forecast_using_bins: true
+  num_bins: 5000
+  absolute_max_bar_value: 20
+  train_epoch_length: 100
+  val_epoch_length: 10
+  test_epoch_length: 10
+  
+metadata_encoder_config:
+  channels: ${foundation_model_config.decoder_model_dims}
+  n_heads: 8
+  num_encoder_layers: 6
+  patch_len: ${foundation_model_config.decoder_input_patch_len}
+  stride: ${foundation_model_config.decoder_input_patch_len}
+ 
+execution_config:
+  save_path: training_logs
+  run_name: "synthetic_training_univariate_medium_series_with_pos_enc"
+  generation_save_path: generation_logs
+  experiment_name: MLFlow_Plotting_Test
+  use_mlflow: false
+  mlflow_tracking_uri: "http://10.15.33.49:5000" # H100 - 4
+
+prior_config:
+  max_classes: 10
+  dataset_length: 1000
+  # override_activations: "identity"
+  min_train_size: 0.90
+  max_train_size: 0.99
+  dataset_has_lag: 0.0
+
+training_config:
+  description_mask_ratio: 0.8 
+  target_mask_ratio: 0.5
+  patience: 50
+  learning_rate: 1e-4
+  n_plots: 24
+  auto_lr_find: True
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  check_test_every_n_epoch: 1000
+  num_devices: 1
+  val_check_interval: 1.0
+  check_val_every_n_epoch: 1
+  strategy: "ddp"
+  save_all_checkpoints: true
+  save_checkpoint_every_n_epochs: -1
+  save_checkpoint_every_n_steps: 1000
+  model_name: "foundation_model"
+  model_file: "fmv3"
+  num_ar_batches: 2
+  precision: "16-mixed"
+  strict_load: true

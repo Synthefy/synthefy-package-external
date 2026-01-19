@@ -1,0 +1,98 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: walmart_sales
+  time_series_length: 64
+  num_channels: 1
+  num_discrete_conditions: 125
+  num_discrete_labels: 3  # Look for `num_original_discrete` in the preprocess stdout.
+  num_continuous_labels: 14
+  latent_dim: 64  # continous
+  discrete_condition_embedding_dim: 125  # Do we want to use discrete encoder here?
+
+  # num_timestamp_labels: 3  # 0 in config_forecasting_eval_air_quality.yaml  # we are not using the timestamp column?
+  # use_metadata: True
+  batch_size: 32
+
+denoiser_config:
+  denoiser_name: "synthefy_forecasting_model_v1"
+  d_model: 256 
+  patch_len: 16
+  stride: 8 # 8 in config_forecasting_eval_air_quality.yaml
+  dropout: 0.1
+  e_layers: 6
+  d_layers: 1
+  d_ff: 512
+  n_heads: 8
+  activation: "gelu"
+  factor: 3
+  output_attention: True
+  use_metadata: True
+
+# Same as config_forecasting_eval_air_quality.yaml#L87
+metadata_encoder_config:
+  use_sa_layer: True
+  channels: ${denoiser_config.d_model}  # TODO: make sure this is actually being used...
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: "synthesis_walmart_sales_w64s4"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+# Same as config_decoder_forecasting_air_quality.yaml#L57
+training_config:
+  max_epochs: 200
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 4
+  strategy: "ddp_find_unused_parameters_true"
+  num_workers: 4
+tstr_config:
+  synthetic_or_original_or_custom: "synthetic"
+  classification_or_regression: "classification"
+  train_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: /home/caleb/synthefy-package/synthefy_data/generation_logs/walmart_sales/Time_Series_Diffusion_Training/synthesis_walmart_sales/train_dataset/
+      synthetic_or_original: "synthetic"
+    - path: /home/caleb/synthefy-package/synthefy_data/generation_logs/walmart_sales/Time_Series_Diffusion_Training/synthesis_walmart_sales/train_dataset/
+      synthetic_or_original: "original"
+    - path: /home/caleb/synthefy-package/synthefy_data/train_logs/walmart_sales/tstr/custom_2025-01-14_08-34-04_dataset/
+      synthetic_or_original: "synthetic" #this must be synthetic for custom data since we only input metadata and may not have GT time series.
+  val_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: /home/caleb/synthefy-package/synthefy_data/generation_logs/walmart_sales/Time_Series_Diffusion_Training/synthesis_walmart_sales/val_dataset/
+      synthetic_or_original: "synthetic"
+    - path: /home/caleb/synthefy-package/synthefy_data/generation_logs/walmart_sales/Time_Series_Diffusion_Training/synthesis_walmart_sales/val_dataset/
+      synthetic_or_original: "original"
+  test_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: /home/caleb/synthefy-package/synthefy_data/generation_logs/walmart_sales/Time_Series_Diffusion_Training/synthesis_walmart_sales/test_dataset/
+      synthetic_or_original: "original" #test should always be real/original data
+  classifier:
+    model_name: resnet1d50
+
+  device: cuda
+  seed: 42
+  num_workers: 4
+  num_devices: 4
+  training:
+    num_devices: 4
+    check_val_every_n_epoch: 5
+    check_test_every_n_epoch: 5
+    learning_rate: 1e-3
+    max_epochs: 100
+    log_dir: /home/caleb/synthefy-package/synthefy_data/train_logs/walmart_sales/tstr/ # <- change this for different runs (TRTR, TSTR, TRSTR)
+  dataset:
+    num_channels: 1
+    time_series_length: 64
+    required_time_series_length: 64
+    use_reduced_horizon: False
+    multi_label: False
+    classification_start_index: 0  # Currently: holiday classification. Alternative: 2-4 (for store classification)
+    classification_inclusive_end_index: 1
+    batch_size: 16

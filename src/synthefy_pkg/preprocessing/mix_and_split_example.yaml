@@ -1,0 +1,21 @@
+input_base_dir: /home/data/enriched_datasets/
+output_dir: /home/raimi2/data/foundation_model_data_tmp/
+
+shuffle: True
+train_ratio: 0.8
+val_ratio: 0.1
+test_ratio: 0.1
+
+selected_datasets:
+  - dataset_name: CPI_partial/CPI_partial_0
+    windows_per_million_mixed_windows: 1_000
+    usage: pretrain
+
+  - dataset_name: fred_cpi_200/fred_cpi_200_0/
+    windows_per_million_mixed_windows: 1_000
+    usage: pretrain
+
+  - dataset_name: CPI_partial/CPI_partial_0
+    windows_per_million_mixed_windows: 1_000
+    usage: blind
+

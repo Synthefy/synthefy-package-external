@@ -1,0 +1,481 @@
+{
+  "description": "Test cases for group filters parameter extraction with diverse scenarios",
+  "test_cases": [
+    {
+      "prompt": "show revenue for enterprise customers",
+      "expected": {
+        "target_columns": ["revenue"],
+        "group_filters": {"customer_segment": ["enterprise"]}
+      },
+      "description": "Should match 'enterprise customers' to customer_segment=enterprise"
+    },
+    {
+      "prompt": "show me the sales for store 1",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"Store": ["store_1"]}
+      },
+      "description": "Should match 'store 1' to 'store_1' with target sales"
+    },
+    {
+      "prompt": "display data for store 15",
+      "expected": {
+        "group_filters": {"Store": ["store_15"]}
+      },
+      "description": "Should match 'store 15' to 'store_15'"
+    },
+    {
+      "prompt": "filter data for electronics and clothing categories",
+      "expected": {
+        "group_filters": {"product_category": ["electronics", "clothing"]}
+      },
+      "description": "Should handle multiple categories"
+    },
+    {
+      "prompt": "show quantity sold for APAC region with high priority",
+      "expected": {
+        "target_columns": ["quantity_sold"],
+        "group_filters": {
+          "region_code": ["APAC"],
+          "priority_level": ["high"]
+        }
+      },
+      "description": "Should handle multiple filter dimensions"
+    },
+    {
+      "prompt": "show me book sales for european customers",
+      "expected": {
+        "group_filters": {
+          "product_category": ["books"],
+          "region_code": ["EU"]
+        }
+      },
+      "description": "Should fuzzy match 'book' to 'books' and 'european' to 'EU'"
+    },
+    {
+      "prompt": "forecast for department D003",
+      "expected": {
+        "group_filters": {"department_id": ["D003"]}
+      },
+      "description": "Should handle exact alphanumeric matching"
+    },
+    {
+      "prompt": "show me data for raimi",
+      "expected": {
+        "group_filters": {"userid": ["raimi"]}
+      },
+      "description": "Should match user name exactly"
+    },
+    {
+      "prompt": "set timestamp column to created_at and forecast for 30 periods",
+      "expected": {
+        "timestamp_column": "created_at",
+        "forecast_length": 30
+      },
+      "description": "Should extract timestamp and forecast length without filters"
+    },
+    {
+      "prompt": "analyze revenue trends using quantity_sold as covariate",
+      "expected": {
+        "target_columns": ["revenue"],
+        "covariates": ["quantity_sold"]
+      },
+      "description": "Should extract target and covariate columns"
+    },
+    {
+      "prompt": "enable metadata leakage and forecast revenue for next 7 days",
+      "expected": {
+        "target_columns": ["revenue"],
+        "leak_metadata": true,
+        "forecast_length": 7
+      },
+      "description": "Should handle boolean parameter extraction"
+    },
+    {
+      "prompt": "show critical priority transactions in north america and latin america regions",
+      "expected": {
+        "group_filters": {
+          "priority_level": ["critical"],
+          "region_code": ["NA", "LATAM"]
+        }
+      },
+      "description": "Should map 'north america' to 'NA' and 'latin america' to 'LATAM'"
+    },
+    {
+      "prompt": "forecast revenue for small business and individual segments using transaction_date as timestamp",
+      "expected": {
+        "target_columns": ["revenue"],
+        "timestamp_column": "transaction_date",
+        "group_filters": {
+          "customer_segment": ["small_business", "individual"]
+        }
+      },
+      "description": "Should extract multiple parameters in complex query"
+    },
+    {
+      "prompt": "show data for gov customers",
+      "expected": {
+        "group_filters": {"customer_segment": ["government"]}
+      },
+      "description": "Should match abbreviation 'gov' to 'government'"
+    },
+    {
+      "prompt": "filter by automotive and sports products for medium to high priority",
+      "expected": {
+        "group_filters": {
+          "product_category": ["automotive", "sports"],
+          "priority_level": ["medium", "high"]
+        }
+      },
+      "description": "Should handle range-like expressions 'medium to high'"
+    },
+    {
+      "prompt": "set covariates to [customer_segment, product_category] and target to quantity_sold",
+      "expected": {
+        "covariates": ["customer_segment", "product_category"],
+        "target_columns": ["quantity_sold"]
+      },
+      "description": "Should handle explicit list-like syntax"
+    },
+    {
+      "prompt": "forecast with 14 day horizon using all departments",
+      "expected": {
+        "forecast_length": 14
+      },
+      "description": "Should extract forecast length and ignore 'all departments' (no specific filter)"
+    },
+    {
+      "prompt": "show active users with credit card payments",
+      "expected": {
+        "group_filters": {
+          "status": ["active"],
+          "payment_method": ["credit_card"]
+        }
+      },
+      "description": "Should match multiple categorical filters"
+    },
+    {
+      "prompt": "display urban location sales data",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"location_type": ["urban"]}
+      },
+      "description": "Should extract location type filter with sales target"
+    },
+    {
+      "prompt": "filter for pending status in europe",
+      "expected": {
+        "group_filters": {
+          "status": ["pending"],
+          "region_code": ["EU"]
+        }
+      },
+      "description": "Should match 'europe' to 'EU' and 'pending' exactly"
+    },
+    {
+      "prompt": "show profit data for store 2 and store 3",
+      "expected": {
+        "target_columns": ["profit"],
+        "group_filters": {"Store": ["store_2", "store_3"]}
+      },
+      "description": "Should handle multiple store filters"
+    },
+    {
+      "prompt": "analyze weekly sales for metropolitan areas",
+      "expected": {
+        "target_columns": ["weekly_sales"],
+        "group_filters": {"location_type": ["metropolitan"]}
+      },
+      "description": "Should extract weekly sales with location filter"
+    },
+    {
+      "prompt": "forecast daily sales for non profit organizations",
+      "expected": {
+        "target_columns": ["daily_sales"],
+        "group_filters": {"customer_segment": ["non_profit"]}
+      },
+      "description": "Should match 'non profit' to 'non_profit'"
+    },
+    {
+      "prompt": "show temperature data for rural locations",
+      "expected": {
+        "target_columns": ["temperature"],
+        "group_filters": {"location_type": ["rural"]}
+      },
+      "description": "Should extract temperature with rural filter"
+    },
+    {
+      "prompt": "filter humidity by paypal payments",
+      "expected": {
+        "target_columns": ["humidity"],
+        "group_filters": {"payment_method": ["paypal"]}
+      },
+      "description": "Should extract humidity with payment method filter"
+    },
+    {
+      "prompt": "show cost analysis for inactive users",
+      "expected": {
+        "target_columns": ["cost"],
+        "group_filters": {"status": ["inactive"]}
+      },
+      "description": "Should extract cost with status filter"
+    },
+    {
+      "prompt": "display inventory levels for small business segment",
+      "expected": {
+        "target_columns": ["inventory_level"],
+        "group_filters": {"customer_segment": ["small_business"]}
+      },
+      "description": "Should extract inventory with customer segment"
+    },
+    {
+      "prompt": "analyze discount trends for electronics in asia pacific",
+      "expected": {
+        "target_columns": ["discount"],
+        "group_filters": {
+          "product_category": ["electronics"],
+          "region_code": ["APAC"]
+        }
+      },
+      "description": "Should match 'asia pacific' to 'APAC'"
+    },
+    {
+      "prompt": "show price data for archived records",
+      "expected": {
+        "target_columns": ["price"],
+        "group_filters": {"status": ["archived"]}
+      },
+      "description": "Should extract price with archived status"
+    },
+    {
+      "prompt": "forecast monthly sales for enterprise customers with bank transfers",
+      "expected": {
+        "target_columns": ["monthly_sales"],
+        "group_filters": {
+          "customer_segment": ["enterprise"],
+          "payment_method": ["bank_transfer"]
+        }
+      },
+      "description": "Should handle complex multi-filter forecast"
+    },
+    {
+      "prompt": "set leak metadata to false and analyze profit for department D001",
+      "expected": {
+        "leak_metadata": false,
+        "target_columns": ["profit"],
+        "group_filters": {"department_id": ["D001"]}
+      },
+      "description": "Should handle boolean false with department filter"
+    },
+    {
+      "prompt": "use datetime as timestamp, forecast for 45 days, and show revenue for store 1",
+      "expected": {
+        "timestamp_column": "datetime",
+        "forecast_length": 45,
+        "target_columns": ["revenue"],
+        "group_filters": {"Store": ["store_1"]}
+      },
+      "description": "Should extract all parameters in complex query"
+    },
+    {
+      "prompt": "set covariates to temperature and humidity, target sales for suburban locations",
+      "expected": {
+        "covariates": ["temperature", "humidity"],
+        "target_columns": ["sales"],
+        "group_filters": {"location_type": ["suburban"]}
+      },
+      "description": "Should extract covariates with location filter"
+    },
+    {
+      "prompt": "enable metadata leakage, use transaction_date as timestamp, forecast 21 days for critical priority",
+      "expected": {
+        "leak_metadata": true,
+        "timestamp_column": "transaction_date",
+        "forecast_length": 21,
+        "group_filters": {"priority_level": ["critical"]}
+      },
+      "description": "Should extract multiple parameters with priority filter"
+    },
+    {
+      "prompt": "show sales for stor 1",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"Store": ["store_1"]}
+      },
+      "description": "Should handle typos in column references"
+    },
+    {
+      "prompt": "display data for enterprize customers",
+      "expected": {
+        "group_filters": {"customer_segment": ["enterprise"]}
+      },
+      "description": "Should handle typos in categorical values"
+    },
+    {
+      "prompt": "filter by eletronic products",
+      "expected": {
+        "group_filters": {"product_category": ["electronics"]}
+      },
+      "description": "Should handle typos in product categories"
+    },
+    {
+      "prompt": "show data for cash paymnt users",
+      "expected": {
+        "group_filters": {"payment_method": ["cash"]}
+      },
+      "description": "Should handle typos in payment method context"
+    },
+    {
+      "prompt": "show sales for shop 2",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"Store": ["store_2"]}
+      },
+      "description": "Should map 'shop' to 'Store' column"
+    },
+    {
+      "prompt": "filter by customer john doe",
+      "expected": {
+        "group_filters": {"userid": ["john_doe"]}
+      },
+      "description": "Should handle underscore matching for names"
+    },
+    {
+      "prompt": "show data for debit card users",
+      "expected": {
+        "group_filters": {"payment_method": ["debit_card"]}
+      },
+      "description": "Should handle space to underscore conversion"
+    },
+    {
+      "prompt": "display info for user 123",
+      "expected": {
+        "group_filters": {"userid": ["user_123"]}
+      },
+      "description": "Should handle partial user ID matching"
+    },
+    {
+      "prompt": "show revenue where region is NA and priority is high",
+      "expected": {
+        "target_columns": ["revenue"],
+        "group_filters": {
+          "region_code": ["NA"],
+          "priority_level": ["high"]
+        }
+      },
+      "description": "Should parse 'where' and 'is' syntax"
+    },
+    {
+      "prompt": "filter data by status equals active and location equals urban",
+      "expected": {
+        "group_filters": {
+          "status": ["active"],
+          "location_type": ["urban"]
+        }
+      },
+      "description": "Should parse 'equals' syntax"
+    },
+    {
+      "prompt": "show sales for store in [store_1, store_2]",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"Store": ["store_1", "store_2"]}
+      },
+      "description": "Should parse list syntax in filters"
+    },
+    {
+      "prompt": "show all data",
+      "expected": {},
+      "description": "Should not extract any filters for 'all data'"
+    },
+    {
+      "prompt": "forecast everything for 10 days",
+      "expected": {
+        "forecast_length": 10
+      },
+      "description": "Should extract only forecast length for general request"
+    },
+    {
+      "prompt": "set timestamp to date",
+      "expected": {
+        "timestamp_column": "date"
+      },
+      "description": "Should extract only timestamp change"
+    },
+    {
+      "prompt": "enable leak metadata",
+      "expected": {
+        "leak_metadata": true
+      },
+      "description": "Should extract only boolean parameter"
+    },
+    {
+      "prompt": "disable metadata leakage and show sales",
+      "expected": {
+        "leak_metadata": false,
+        "target_columns": ["sales"]
+      },
+      "description": "Should handle disable/false boolean extraction"
+    },
+    {
+      "prompt": "use created_at as timestamp, set covariates to [temperature, humidity, price], target weekly_sales, forecast 30 periods for active enterprise customers in north america with credit card payments",
+      "expected": {
+        "timestamp_column": "created_at",
+        "covariates": ["temperature", "humidity", "price"],
+        "target_columns": ["weekly_sales"],
+        "forecast_length": 30,
+        "group_filters": {
+          "status": ["active"],
+          "customer_segment": ["enterprise"],
+          "region_code": ["NA"],
+          "payment_method": ["credit_card"]
+        }
+      },
+      "description": "Should handle very complex multi-parameter query"
+    },
+    {
+      "prompt": "show sales for credit card payments",
+      "expected": {
+        "target_columns": ["sales"],
+        "group_filters": {"payment_method": ["credit_card"]}
+      },
+      "description": "Should match 'credit card' to 'credit_card' despite context showing underscores"
+    },
+    {
+      "prompt": "filter by debit card transactions",
+      "expected": {
+        "group_filters": {"payment_method": ["debit_card"]}
+      },
+      "description": "Should match 'debit card' to 'debit_card' despite context showing underscores"
+    },
+    {
+      "prompt": "show data for john doe user",
+      "expected": {
+        "group_filters": {"userid": ["john_doe"]}
+      },
+      "description": "Should match 'john doe' to 'john_doe' despite context showing underscores"
+    },
+    {
+      "prompt": "filter by small business segment",
+      "expected": {
+        "group_filters": {"customer_segment": ["small_business"]}
+      },
+      "description": "Should match 'small business' to 'small_business' despite context showing underscores"
+    },
+    {
+      "prompt": "show revenue for non profit organizations",
+      "expected": {
+        "target_columns": ["revenue"],
+        "group_filters": {"customer_segment": ["non_profit"]}
+      },
+      "description": "Should match 'non profit' to 'non_profit' despite context showing underscores"
+    },
+    {
+      "prompt": "display bank transfer payments",
+      "expected": {
+        "group_filters": {"payment_method": ["bank_transfer"]}
+      },
+      "description": "Should match 'bank transfer' to 'bank_transfer' despite context showing underscores"
+    }
+  ]
+} 

@@ -1,0 +1,52 @@
+device: "cuda"
+task: "forecast"
+trainer: "forecasting_model" # "foundation_model", "synthesis_model", "forecasting_model", or "metadata_encoder"
+
+# history_length = time_series_length - forecast_length
+dataset_config:
+  dataloader_name: ShardedDataloaderV1
+  dataset_name: foundation_model_data_all_univariate_10000_0_10000/blind
+  time_series_length: 256
+  forecast_length: 128
+  metadata_length: 3460 
+  timestamp_start_idx: 3
+  timestamp_end_idx: 2819
+  dataset_description_start_idx: 2819
+  dataset_description_end_idx: 3203
+  continuous_start_idx: 3203
+  continuous_end_idx: 3459
+  dataset_idx_start_idx: 3459
+  dataset_idx_end_idx: 3460
+  text_embedding_dim: 384
+  batch_size: 128
+  num_timestamp_features: 11
+  num_correlates: 2
+  num_datasets: 10000
+  use_metadata: false
+
+# These parameters are fixed for the pretrained timesfm model
+timesfm_config:
+  checkpoint_name: "google/timesfm-1.0-200m-pytorch"
+  input_patch_len: 32
+  output_patch_len: 128
+  num_layers: 20
+  model_dims: 1280
+  num_heads: 16
+
+execution_config:
+  save_path: training_logs
+  run_name: "timesfm_on_fm_data"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  max_epochs: 1
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_test_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  val_check_interval: 1.0
+  check_val_every_n_epoch: 1
+  strategy: "ddp_find_unused_parameters_true"

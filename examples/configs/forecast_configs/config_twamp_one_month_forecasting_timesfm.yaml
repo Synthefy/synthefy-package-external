@@ -1,0 +1,43 @@
+device: "cuda"
+task: "forecast"
+
+dataset_config:
+  dataset_name: twamp_one_month
+
+  num_channels: 5
+  time_series_length: 96
+
+  forecast_length: 32
+  num_discrete_labels: 8
+  num_discrete_conditions: 310
+  num_continuous_labels: 20
+  discrete_condition_embedding_dim: 128
+  latent_dim: 64
+  num_timestamp_labels: 3
+  use_metadata: True
+  batch_size: 16
+
+# These parameters are fixed for the pretrained timesfm model
+timesfm_config:
+  checkpoint_name: "google/timesfm-1.0-200m-pytorch"
+  input_patch_len: 32
+  output_patch_len: 128
+  num_layers: 20
+  model_dims: 1280
+  num_heads: 16
+
+execution_config:
+  save_path: training_logs
+  run_name: "timesfm_finetuning_twamp_one_month"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  max_epochs: 10
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

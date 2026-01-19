@@ -1,0 +1,27 @@
+# config.toml for a multi‐GPU setup with A100 80GB GPUs
+
+model = "llama3.2"
+
+system_message = """
+You are a precise and efficient assistant focused on data processing tasks.
+For extraction tasks, extract only the explicitly requested information.
+For expansion tasks, provide detailed but relevant expansions while maintaining factual accuracy.
+Keep responses concise and focused on the task requirements.
+"""
+
+[ollama_instances]
+# format: "host:port" = GPU index
+# Using all available A100s (except GPUs 2 and 3 which are in use)
+# 4 instances per GPU for maximum throughput
+"127.0.0.1:11432" = 0
+"127.0.0.1:11433" = 0
+"127.0.0.1:11434" = 1
+"127.0.0.1:11435" = 1
+"127.0.0.1:11436" = 4
+"127.0.0.1:11437" = 4
+"127.0.0.1:11438" = 5
+"127.0.0.1:11439" = 5
+"127.0.0.1:11440" = 6
+"127.0.0.1:11441" = 6
+"127.0.0.1:11442" = 7
+"127.0.0.1:11443" = 7

@@ -1,0 +1,72 @@
+# loader_schema
+---
+  standardized_dataset_category_names:
+    description: the name of the top folder containing the datasets to load from for data. If empty, will load from all datasets (/home/data/standardized_data/*), which is equivalent to -ALL. We should default to ALL
+    example:
+      - ALL
+  meta_standardized_dataset_category_names:
+    description: the name of the top folder containing the datasets to load from for metadata. If empty, will load from all datasets (/home/data/standardized_data/*). To limit the amount of data, it is preferable to load from a partial dataset
+    example:
+      - ALL
+  time_series_filters:
+    description: For loading data for main datasets. Multiple keys in a yaml list with the below format, if empty, loads all
+    - key: value
+      description: value is the value that the key in standardized metadata must take
+      key_pattern: Any key in metadata|size_leq|size_geq|length_leq|length_geq|num_columns_leq|num_columns_geq|frequency_leq|frequency_geq|frequency_eq|num_columns_leq|num_columns_geq|size|length|num_columns|column_keywords|frequency
+      Special_patterns:
+        - column_keywords: a list of keywords to search for in the title or description of any of the final_columns, thus the output should be in yaml list format. Multiple column_keyword filters can still be used
+          example:
+          - column_keywords:
+            - keyword1
+            - keyword2
+            ...
+      example:
+        - title: Commodities
+  post_filters:
+    description: The same as data_filters, but filters post-slicing. Also can only be on size and length operations
+    - key: value
+      example:
+        - size_geq: 10000
+        - length_geq: 100
+  metadata_filters:
+    description: For loading data for main multiple keys in a yaml list with the below format
+    - key: value
+      description: value is the value that the key in standardized metadata must take
+      key_pattern: Any key in metadata|size_leq|size_geq|length_leq|length_geq|num_columns_leq|num_columns_geq|frequency_leq|frequency_geq|frequency_eq|num_columns_leq|num_columns_geq|size|length|num_columns|column_keywords|frequency
+      example:
+        - title: CPI
+  post_metadata_filters:
+    description: The same as post_filters, but for metadata
+  complex_filter: 
+    description: a string using &, |, ~, () to denote a logical operation on the filters, where the filters are formatted according to the pattern
+    filter_pattern: key_filter
+    example: ~title_CPI&length_geq_100
+  metadata_complex_filter: 
+    description: the same as complex_filter, but for metadata filters
+  post_complex_filter:
+    description: the same as complex_filter, but the filters can only be on size (length*num_columns) and length operations applied after the data has been sliced
+    filter_pattern: key_filter
+    example: ~size_geq_10000&length_geq_100
+  post_metadata_complex_filter:
+    description: the same as post_complex_filter, but for metadata filters
+  metadata_n_longest:
+    description: Instead of taking all metadata series, take the longest n metadata series in terms of post-filter length, if there are multiple of the same length takes some 10 of them (based on hasing)
+    type: int
+    example: 10
+  input_data_dir:
+    description: the directory to load the data from
+    example: /home/data/standardized/
+  output_dir:
+    description: the directory to save the data to
+    example: /home/data/train_datasets/
+  outname:
+    description: the name of the output folder (will be stored in /home/data/foundation_datasets)
+    example: all_not_CPI
+  nan_fill_frequency:
+    description: whether to fill missing values with NaN for the series frequency. Note setting this to false may result in errors with merging
+    example: true
+  time_period:
+    description: the time period to load the data from
+    example:
+      start: 2020-01-01
+      end: 2020-12-31

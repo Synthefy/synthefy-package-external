@@ -1,0 +1,56 @@
+device: "cuda"
+task: "forecast"
+
+# history_length = time_series_length - forecast_length
+dataset_config:
+  dataset_name: air_quality
+  num_channels: 6
+  time_series_length: 96
+  forecast_length: 32
+  num_discrete_labels: 2
+  num_discrete_conditions: 29
+  num_continuous_labels: 8
+  discrete_condition_embedding_dim: 128
+
+  latent_dim: 64
+  num_timestamp_labels: 3
+  use_metadata: True
+  batch_size: 256
+
+denoiser_config:
+  denoiser_name: "synthefy_forecasting_model_v2"
+  d_model: 256
+  patch_len: 16
+  stride: 8
+  dropout: 0.1
+  e_layers: 6
+  d_layers: 1
+  d_ff: 512
+  n_heads: 8
+  activation: "gelu"
+  factor: 3
+  output_attention: True
+  use_metadata: True
+  ratio: 0.5
+
+metadata_encoder_config:
+  use_sa_layer: True
+  channels: ${denoiser_config.d_model}
+  n_heads: 8
+  num_encoder_layers: 2
+
+execution_config:
+  save_path: training_logs
+  run_name: "synthefy_forecasting_model_v2_air_quality"
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+
+training_config:
+  max_epochs: 30
+  learning_rate: 1e-4
+  n_plots: 4
+  auto_lr_find: True
+  check_val_every_n_epoch: 1
+  log_every_n_steps: 1
+  num_devices: 1
+  strategy: "auto"

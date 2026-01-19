@@ -1,0 +1,257 @@
+{
+  "description": "Test cases for what-if parameter modification tool",
+  "test_categories": {
+    "performance_comparison": {
+      "description": "Basic prompts for performance testing between regular and fast LLM",
+      "test_prompts": [
+        "What if the sales increase 30%?",
+        "If revenue drops by 15%, what happens?",
+        "Set the price to 25."
+      ]
+    },
+    "percentage_increase": {
+      "description": "Test percentage increases don't generate invalid perturbation_types",
+      "test_prompts": [
+        "What if the sales increase 30%?",
+        "If revenue grows by 25 percent, what happens?",
+        "Increase the price by 50%.",
+        "What if sales go up by twenty percent?"
+      ]
+    },
+    "percentage_decrease": {
+      "description": "Test percentage decreases don't generate invalid perturbation_types",
+      "test_prompts": [
+        "If sales drop by 20 percent, what happens?",
+        "What if revenue decreases by 15%?",
+        "What if the price is reduced by 5 percent?",
+        "Revenue falls by thirty percent."
+      ]
+    },
+    "arithmetic_operations": {
+      "description": "Test arithmetic operations with expected perturbation types",
+      "test_cases": [
+        {
+          "prompt": "Assume revenue increases by 1000.",
+          "expected_perturbation_type": "add"
+        },
+        {
+          "prompt": "What if we subtract 100 from the revenue?",
+          "expected_perturbation_type": "subtract"
+        },
+        {
+          "prompt": "If the cost doubles, what happens?",
+          "expected_perturbation_type": "multiply"
+        },
+        {
+          "prompt": "What if the profit is divided by 2?",
+          "expected_perturbation_type": "divide"
+        },
+        {
+          "prompt": "Add 500 to the sales.",
+          "expected_perturbation_type": "add"
+        },
+        {
+          "prompt": "Reduce cost by 200.",
+          "expected_perturbation_type": "subtract"
+        }
+      ]
+    },
+    "exact_values": {
+      "description": "Test exact value setting (should have null perturbation_type)",
+      "test_prompts": [
+        "Set the price to 10.",
+        "Set store_name to 'New York Store'.",
+        "Change region to 'Northeast'.",
+        "Set temperature to 25 degrees."
+      ]
+    },
+    "comprehensive_string_exact_values": {
+      "description": "Comprehensive test for various string exact value patterns",
+      "test_categories": {
+        "business_categorical": [
+          "Set customer_segment to 'enterprise'",
+          "Change product_category to 'electronics'",
+          "Set payment_method to 'credit_card'",
+          "Set priority_level to 'critical'",
+          "Change status to 'active'",
+          "Set location_type to 'metropolitan'"
+        ],
+        "code_and_id_values": [
+          "Set department_id to 'D001'",
+          "Change region_code to 'APAC'",
+          "Set userid to 'user_001'",
+          "Set user_id to '1234567890'",
+          "Set product_code to '12345'"
+        ],
+        "string_format_variations": [
+          "Set store_name to New York Store",
+          "Set store_name to \"New York Store\"",
+          "Set status to 'in progress - urgent!'",
+          "Set description to 'Economic & Financial'",
+          "Set description to 'High-priority task #123'"
+        ],
+        "multiple_string_values": [
+          "Set store_name to 'Boston Store' and region to 'Northeast' and status to 'active'",
+          "Change customer_segment to 'enterprise' and payment_method to 'bank_transfer'",
+          "Set Store to 'Store_1' and priority_level to 'high'"
+        ],
+        "edge_cases": [
+          "Set code to 'A'",
+          "Set status to ''",
+          "Set description to 'This is a very long description with multiple words and punctuation marks like commas, periods, and exclamation points!'"
+        ],
+        "mixed_string_and_numeric": [
+          "Set store_name to 'Chicago Store' and price to 25.99",
+          "Change region to 'West Coast' and revenue to 50000",
+          "Set customer_segment to 'Small_Business' and temperature to 22"
+        ]
+      }
+    },
+    "multiple_modifications": {
+      "description": "Test multiple modifications in single prompts",
+      "test_prompts": [
+        "If cost increases by 5 and profit drops by 10%, what happens?",
+        "Set the price to 10 and increase demand by 20%.",
+        "Revenue goes up 15% and cost doubles."
+      ]
+    },
+    "edge_cases": {
+      "description": "Edge cases that might cause hallucination",
+      "test_prompts": [
+        "What if sales increase by one hundred percent?",
+        "Double the revenue and halve the cost.",
+        "Increase price by half.",
+        "Sales grow fifty percent.",
+        "Cut costs by a quarter."
+      ]
+    },
+    "invalid_prompts": {
+      "description": "Invalid prompts that should be handled gracefully",
+      "test_prompts": [
+        "",
+        "What if xyz column increases?",
+        "Show me a plot of the data",
+        "Increase everything by 50%!"
+      ]
+    },
+    "fuzzy_column_matching": {
+      "description": "Test typos and variations in column names",
+      "test_cases": [
+        {
+          "prompt": "Set the sotre to 'Main Street'",
+          "acceptable_columns": ["store_name", "Store"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Change the stor name to 'Downtown Branch'",
+          "acceptable_columns": ["store_name", "Store"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "What if custmer sales increase by 30%?",
+          "acceptable_columns": ["sales"],
+          "expected_perturbation_type": "multiply"
+        },
+        {
+          "prompt": "Set product nam to 'Widget A'",
+          "acceptable_columns": ["product_name"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Change the catgory to 'Electronics'",
+          "acceptable_columns": ["category", "product_category"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Update user staus to 'Active'",
+          "acceptable_columns": ["user_status", "status"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Set the name of the store to 'Central Store'",
+          "acceptable_columns": ["store_name", "Store"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "What if the stor region is 'Northeast'?",
+          "acceptable_columns": ["store_region", "region"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Change custmer name to 'John Doe'",
+          "acceptable_columns": ["customer_name"],
+          "expected_perturbation_type": null
+        },
+        {
+          "prompt": "Set the staus to 'Inactive'",
+          "acceptable_columns": ["user_status", "status"],
+          "expected_perturbation_type": null
+        }
+      ]
+    },
+    "mixed_typos_and_operations": {
+      "description": "Complex prompts with both typos and various operations",
+      "test_prompts": [
+        "Set the sotre to 'NYC Store' and increase revenu by 25%",
+        "Change custmer typ to 'Premium' and double the sales",
+        "What if the stor region is 'West' and cost drops by 15%?",
+        "Set product nam to 'Product X' and reduce price by 10%"
+      ]
+    },
+    "strict_perturbation_validation": {
+      "description": "Prompts that historically caused issues with invalid perturbation types",
+      "test_prompts": [
+        "What if sales go up 25%?",
+        "Revenue decreases by half",
+        "Double the profits and cut costs",
+        "Increase temperature by 10 degrees",
+        "Set price to $50",
+        "Sales grow fifty percent"
+      ]
+    },
+    "invalid_column_handling": {
+      "description": "Test prompts with non-existent columns (for minimal dataset)",
+      "test_prompts": [
+        "Set the temperature to 25",
+        "What if customer_name is 'John'?",
+        "Increase the xyz_column by 50%"
+      ]
+    },
+    "hallucination_test": {
+      "description": "Comprehensive test designed to catch hallucination",
+      "test_prompts": [
+        "What if the sales increase 30%?",
+        "If revenue grows by 25 percent, what happens?",
+        "Sales drop by 20%.",
+        "Revenue increases fifty percent.",
+        "Double the profits.",
+        "Cut costs in half.",
+        "Set store_name to 'New York Store' and region to 'Northeast'.",
+        "Change status to 'in progress - urgent!' and priority_level to 'critical'.",
+        "Set customer_segment to 'enterprise' and increase sales by 15%.",
+        "Set user_id to '1234567890' and double the revenue.",
+        "Set the sotre to 'Main Street' and increase sales by 20%.",
+        "Change custmer name to 'John Doe' and reduce cost by 15%.",
+        "What if stor region is 'West' and revenue doubles?",
+        "Set product nam to 'Widget' and increase price by 10%.",
+        "Change the name of the store to 'Central' and catgory to 'Tech'.",
+        "Update user staus to 'Active' and multiply profits by 1.5."
+      ]
+    },
+    "fuzzy_matching_performance": {
+      "description": "Test prompts with various typos and complexities for performance testing",
+      "fuzzy_prompts": [
+        "Set the sotre to 'Main Street'",
+        "Change custmer name to 'John' and stor region to 'West'",
+        "What if the name of the store is 'Central' and catgory is 'Tech'?",
+        "Update user staus to 'Active' and increase revenu by 25%"
+      ],
+      "clean_prompts": [
+        "Set the store_name to 'Main Street'",
+        "Change customer_name to 'John' and store_region to 'West'",
+        "What if the store_name is 'Central' and category is 'Tech'?",
+        "Update user_status to 'Active' and increase revenue by 25%"
+      ]
+    }
+  }
+} 

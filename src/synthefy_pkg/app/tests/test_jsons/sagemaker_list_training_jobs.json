@@ -1,0 +1,7 @@
+{
+    "action": "list_training_jobs",
+    "client_id": "customer-0",
+    "task": ["synthesis", "forecast"],
+    "dataset_name": "twamp_one_month_sagemaker",
+    "max_results": 5
+} 

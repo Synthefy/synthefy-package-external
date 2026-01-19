@@ -1,0 +1,53 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": true,
+    "window_from_beginning": false,
+    "shuffle": true,
+    "train_val_split": {
+        "train": 0.9,
+        "val": 0.05
+    },
+    "filename": "motionsense/motionsense.parquet",
+    "window_size": 256,
+    "stride": 32,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "subject_id"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "attitude.roll",
+            "attitude.pitch",
+            "attitude.yaw",
+            "userAcceleration.x",
+            "userAcceleration.y",
+            "userAcceleration.z"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "action",
+            "gender"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "gravity.x",
+            "gravity.y",
+            "gravity.z",
+            "rotationRate.x",
+            "rotationRate.y",
+            "rotationRate.z",
+            "weight",
+            "height",
+            "age"
+        ],
+        "scalers": {}
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": false,
+    "add_lag_data": false,
+    "window_from_beginning": false,
+    "shuffle": false,
+    "train_val_split": {
+        "train": 0.8,
+        "val": 0.1
+    },
+    "filename": "oura/daily_ts_100k_with_custom_split.parquet",
+    "window_size": 96,
+    "stride": 32,
+    "timestamps_col": [],
+    "group_labels": {
+        "cols": [
+            "user_id"
+        ],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "average_hrv",
+            "lowest_heart_rate",
+            "age_cva_diff",
+            "highest_temperature",
+            "stressed_duration",
+            "latency"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+            "gender_male"
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "cols": [
+            "bmi",
+            "hrv_std",
+            "awake_mins",
+            "age",
+            "readiness_score",
+            "sleep_score",
+            "low_activity_time",
+            "deep_mins",
+            "sleep_duration",
+            "restored_duration",
+            "non_wear_time",
+            "rem_mins",
+            "steps",
+            "active_calories",
+            "heart_rate_std",
+            "sedentary_time",
+            "high_activity_met_minutes",
+            "hours_after_oura_sleep_start",
+            "light_mins",
+            "medium_activity_met_minutes"
+        ],
+        "scalers": {}
+    }
+}

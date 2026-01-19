@@ -1,0 +1,557 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* OURA Dark Theme Colors */
+  --oura-bg-dark: #1a1815;
+  --oura-bg-darker: #0f0e0c;
+
+  /* Warm glass tints (from OURA app cards) */
+  --oura-glass-warm: rgba(140, 125, 105, 0.45);
+  --oura-glass-warm-light: rgba(160, 145, 125, 0.35);
+  --oura-glass-border: rgba(180, 165, 145, 0.25);
+
+  /* Sleep stage colors (from OURA app) */
+  --oura-sleep-awake: #f5f5f5;
+  --oura-sleep-rem: #7eb8da;
+  --oura-sleep-light: #a8c8dc;
+  --oura-sleep-deep: #4a7c9b;
+
+  /* Accent colors */
+  --oura-heart: #e57373;
+  --oura-teal: #07ad98;
+
+  /* Text colors */
+  --oura-text-primary: #f5f2ed;
+  --oura-text-secondary: rgba(245, 242, 237, 0.7);
+  --oura-text-muted: rgba(245, 242, 237, 0.5);
+}
+
+* {
+  border-color: var(--oura-glass-border);
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(180deg, #1a1815 0%, #0f0e0c 100%);
+  min-height: 100vh;
+  color: var(--oura-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* OURA-style headings with serif font */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Custom scrollbar - dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 125, 105, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 145, 125, 0.6);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-highlight {
+
+  0%,
+  100% {
+    background-color: var(--oura-sleep-rem);
+    box-shadow: 0 0 8px 2px rgba(126, 184, 218, 0.6);
+    transform: scale(1);
+  }
+
+  50% {
+    background-color: var(--oura-sleep-light);
+    box-shadow: 0 0 16px 6px rgba(126, 184, 218, 0.8);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes liquidShine {
+  0% {
+    background-position: 200% 50%;
+  }
+
+  100% {
+    background-position: -200% 50%;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* OURA Dark Liquid Glass - Warm tinted */
+.liquid-glass {
+  background: linear-gradient(145deg,
+      rgba(140, 125, 105, 0.5) 0%,
+      rgba(120, 105, 85, 0.4) 50%,
+      rgba(130, 115, 95, 0.45) 100%);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(180, 165, 145, 0.2);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Dark glass header */
+.liquid-glass-header {
+  background: linear-gradient(180deg,
+      rgba(35, 32, 28, 0.95) 0%,
+      rgba(26, 24, 21, 0.9) 100%);
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border-bottom: 1px solid rgba(140, 125, 105, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Liquid glass card - warm OURA style */
+.liquid-glass-card {
+  background: linear-gradient(145deg,
+      rgba(140, 125, 105, 0.45) 0%,
+      rgba(115, 100, 80, 0.35) 50%,
+      rgba(125, 110, 90, 0.4) 100%);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(180, 165, 145, 0.15);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle shine animation */
+.liquid-glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.05) 45%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 55%,
+      transparent 60%);
+  background-size: 200% 100%;
+  animation: liquidShine 8s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Liquid glass chart container */
+.liquid-glass-chart {
+  background: linear-gradient(160deg,
+      rgba(45, 40, 35, 0.9) 0%,
+      rgba(35, 30, 25, 0.85) 50%,
+      rgba(40, 35, 30, 0.88) 100%);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(140, 125, 105, 0.2);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+/* Standard glass effect - dark */
+.glass {
+  background: linear-gradient(180deg,
+      rgba(35, 32, 28, 0.95) 0%,
+      rgba(26, 24, 21, 0.9) 100%);
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border: 1px solid rgba(140, 125, 105, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* OURA-style gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--oura-sleep-rem) 0%, var(--oura-sleep-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* OURA-style serif italic heading */
+.oura-heading {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--oura-text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* Button styles - Dark theme */
+.btn-primary {
+  @apply px-5 py-2.5 rounded-xl font-medium transition-all duration-200 ease-out;
+  background: linear-gradient(135deg, rgba(140, 125, 105, 0.6) 0%, rgba(100, 85, 65, 0.6) 100%);
+  color: var(--oura-text-primary);
+  border: 1px solid rgba(180, 165, 145, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgba(160, 145, 125, 0.7) 0%, rgba(120, 105, 85, 0.7) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  @apply cursor-not-allowed;
+  background: rgba(60, 55, 50, 0.5);
+  color: var(--oura-text-muted);
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-secondary {
+  @apply px-5 py-2.5 rounded-xl font-medium transition-all duration-200 ease-out;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--oura-text-primary);
+  border: 1px solid rgba(180, 165, 145, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(180, 165, 145, 0.3);
+}
+
+.btn-secondary:disabled {
+  @apply cursor-not-allowed;
+  background: rgba(40, 35, 30, 0.5);
+  color: var(--oura-text-muted);
+  border-color: transparent;
+}
+
+.btn-success {
+  @apply px-5 py-2.5 rounded-xl font-medium transition-all duration-200 ease-out;
+  background: linear-gradient(135deg, var(--oura-sleep-rem) 0%, var(--oura-sleep-deep) 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(126, 184, 218, 0.2);
+}
+
+.btn-success:hover {
+  box-shadow: 0 4px 12px rgba(126, 184, 218, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-success:disabled {
+  @apply cursor-not-allowed;
+  background: rgba(60, 55, 50, 0.5);
+  color: var(--oura-text-muted);
+  box-shadow: none;
+  transform: none;
+}
+
+/* OURA-style card - warm liquid glass on dark */
+.card {
+  @apply rounded-2xl transition-all duration-300 ease-out relative;
+  background: linear-gradient(145deg,
+      rgba(140, 125, 105, 0.4) 0%,
+      rgba(115, 100, 80, 0.3) 50%,
+      rgba(125, 110, 90, 0.35) 100%);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(180, 165, 145, 0.15);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.15) 80%,
+      transparent 100%);
+  z-index: 1;
+}
+
+.card:hover {
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(180, 165, 145, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Input styles - Dark theme */
+.input {
+  @apply w-full px-4 py-3 rounded-xl transition-all duration-200 ease-out;
+  background: rgba(30, 27, 24, 0.8);
+  border: 1px solid rgba(140, 125, 105, 0.2);
+  color: var(--oura-text-primary);
+}
+
+.input::placeholder {
+  color: var(--oura-text-muted);
+}
+
+.input:focus {
+  @apply outline-none ring-2;
+  ring-color: var(--oura-sleep-rem);
+  border-color: transparent;
+  background: rgba(35, 32, 28, 0.9);
+}
+
+.input:disabled {
+  @apply cursor-not-allowed;
+  background: rgba(25, 22, 20, 0.6);
+  color: var(--oura-text-muted);
+}
+
+/* Select styles - Dark theme */
+.select {
+  @apply w-full px-4 py-3 rounded-xl transition-all duration-200 ease-out appearance-none cursor-pointer;
+  background: rgba(30, 27, 24, 0.8);
+  border: 1px solid rgba(140, 125, 105, 0.2);
+  color: var(--oura-text-primary);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a09080' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.select:focus {
+  @apply outline-none ring-2;
+  ring-color: var(--oura-sleep-rem);
+  border-color: transparent;
+  background-color: rgba(35, 32, 28, 0.9);
+}
+
+/* Tag/badge styles - Dark theme */
+.tag {
+  @apply inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium;
+  background: rgba(140, 125, 105, 0.3);
+  color: var(--oura-text-primary);
+  border: 1px solid rgba(180, 165, 145, 0.15);
+}
+
+.tag-success {
+  background: rgba(7, 173, 152, 0.2);
+  color: var(--oura-teal);
+  border-color: rgba(7, 173, 152, 0.3);
+}
+
+.tag-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.tag-error {
+  background: rgba(229, 115, 115, 0.2);
+  color: var(--oura-heart);
+  border-color: rgba(229, 115, 115, 0.3);
+}
+
+.tag-accent {
+  background: rgba(126, 184, 218, 0.2);
+  color: var(--oura-sleep-rem);
+  border-color: rgba(126, 184, 218, 0.3);
+}
+
+.tag-blue {
+  background: rgba(126, 184, 218, 0.15);
+  color: var(--oura-sleep-light);
+  border-color: rgba(126, 184, 218, 0.25);
+}
+
+/* OURA Ring icon container */
+.oura-ring-icon {
+  @apply w-10 h-10 rounded-xl flex items-center justify-center;
+  background: linear-gradient(135deg, rgba(140, 125, 105, 0.6) 0%, rgba(100, 85, 65, 0.5) 100%);
+  border: 1px solid rgba(180, 165, 145, 0.2);
+}
+
+/* Step number indicator - Dark theme with blue accent */
+.step-indicator {
+  @apply w-8 h-8 rounded-lg flex items-center justify-center font-semibold text-sm;
+  background: rgba(126, 184, 218, 0.2);
+  color: var(--oura-sleep-rem);
+  border: 1px solid rgba(126, 184, 218, 0.3);
+}
+
+.step-indicator-active {
+  background: linear-gradient(135deg, var(--oura-sleep-rem) 0%, var(--oura-sleep-deep) 100%);
+  color: white;
+  border: none;
+}
+
+/* Hover glow effect - blue theme */
+.hover-glow:hover {
+  box-shadow: 0 0 24px rgba(126, 184, 218, 0.15);
+}
+
+/* Loading shimmer - dark */
+.shimmer {
+  background: linear-gradient(90deg,
+      rgba(60, 55, 50, 0.5) 0%,
+      rgba(80, 75, 70, 0.5) 50%,
+      rgba(60, 55, 50, 0.5) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Sleep bar colors (matching OURA app exactly) */
+.sleep-bar-awake {
+  background: var(--oura-sleep-awake);
+}
+
+.sleep-bar-rem {
+  background: var(--oura-sleep-rem);
+}
+
+.sleep-bar-light {
+  background: var(--oura-sleep-light);
+}
+
+.sleep-bar-deep {
+  background: var(--oura-sleep-deep);
+}
+
+/* Range slider styling for zoom */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #7eb8da;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-top: -6px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #7eb8da;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: transparent;
+}

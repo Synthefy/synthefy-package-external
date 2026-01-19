@@ -1,0 +1,207 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": true,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "energy_demand/energy_demand.parquet",
+  "freq": "1H",
+  "window_size": 32,
+  "stride": 32,
+  "timestamps_col": [
+    "time"
+  ],
+  "timeseries": {
+    "cols": [
+      "total load actual",
+      "price actual"
+    ],
+    "scalers": {
+      "total load actual": {
+        "scaler_type": "standard"
+      },
+      "price actual": {
+        "scaler_type": "standard"
+      }
+    }
+  },
+  "discrete": {
+    "cols": [
+      " Barcelona_weather_description",
+      "Bilbao_weather_description",
+      "Madrid_weather_description",
+      "Seville_weather_description",
+      "Valencia_weather_description",
+      " Barcelona_weather_icon",
+      "Bilbao_weather_icon",
+      "Madrid_weather_icon",
+      "Seville_weather_icon",
+      "Valencia_weather_icon",
+      " Barcelona_weather_id",
+      "Bilbao_weather_id",
+      "Madrid_weather_id",
+      "Seville_weather_id",
+      "Valencia_weather_id",
+      " Barcelona_weather_main",
+      "Bilbao_weather_main",
+      "Madrid_weather_main",
+      "Seville_weather_main",
+      "Valencia_weather_main"
+    ],
+    "scalers": {
+      " Barcelona_weather_description": {
+        "scaler_type": "embedding"
+      },
+      "Bilbao_weather_description": {
+        "scaler_type": "embedding"
+      },
+      "Madrid_weather_description": {
+        "scaler_type": "embedding"
+      },
+      "Seville_weather_description": {
+        "scaler_type": "embedding"
+      },
+      "Valencia_weather_description": {
+        "scaler_type": "embedding"
+      }
+    }
+  },
+  "continuous": {
+    "cols": [
+      " Barcelona_clouds_all",
+      "Bilbao_clouds_all",
+      "Madrid_clouds_all",
+      "Seville_clouds_all",
+      "Valencia_clouds_all",
+      " Barcelona_humidity",
+      "Bilbao_humidity",
+      "Madrid_humidity",
+      "Seville_humidity",
+      "Valencia_humidity",
+      " Barcelona_pressure",
+      "Bilbao_pressure",
+      "Madrid_pressure",
+      "Seville_pressure",
+      "Valencia_pressure",
+      " Barcelona_rain_1h",
+      "Bilbao_rain_1h",
+      "Madrid_rain_1h",
+      "Seville_rain_1h",
+      "Valencia_rain_1h",
+      " Barcelona_rain_3h",
+      "Bilbao_rain_3h",
+      "Madrid_rain_3h",
+      "Seville_rain_3h",
+      "Valencia_rain_3h",
+      "Bilbao_snow_3h",
+      "Madrid_snow_3h",
+      "Valencia_snow_3h",
+      " Barcelona_temp",
+      "Bilbao_temp",
+      "Madrid_temp",
+      "Seville_temp",
+      "Valencia_temp",
+      " Barcelona_temp_max",
+      "Bilbao_temp_max",
+      "Madrid_temp_max",
+      "Seville_temp_max",
+      "Valencia_temp_max",
+      " Barcelona_temp_min",
+      "Bilbao_temp_min",
+      "Madrid_temp_min",
+      "Seville_temp_min",
+      "Valencia_temp_min",
+      " Barcelona_wind_deg",
+      "Bilbao_wind_deg",
+      "Madrid_wind_deg",
+      "Seville_wind_deg",
+      "Valencia_wind_deg",
+      " Barcelona_wind_speed",
+      "Bilbao_wind_speed",
+      "Madrid_wind_speed",
+      "Seville_wind_speed",
+      "Valencia_wind_speed",
+      "generation biomass",
+      "generation fossil brown coal/lignite",
+      "generation fossil gas",
+      "generation fossil hard coal",
+      "generation fossil oil",
+      "generation hydro pumped storage consumption",
+      "generation hydro run-of-river and poundage",
+      "generation hydro water reservoir",
+      "generation nuclear",
+      "generation other",
+      "generation other renewable",
+      "generation solar",
+      "generation waste",
+      "generation wind onshore",
+      "forecast solar day ahead",
+      "forecast wind onshore day ahead"
+    ],
+    "scalers": {
+      " Barcelona_pressure": {
+        "scaler_type": "standard"
+      },
+      "Bilbao_pressure": {
+        "scaler_type": "standard"
+      },
+      "Madrid_pressure": {
+        "scaler_type": "standard"
+      },
+      "Seville_pressure": {
+        "scaler_type": "standard"
+      },
+      "Valencia_pressure": {
+        "scaler_type": "standard"
+      },
+      " Barcelona_rain_1h": {
+        "scaler_type": "minmax"
+      },
+      "Bilbao_rain_1h": {
+        "scaler_type": "minmax"
+      },
+      "Madrid_rain_1h": {
+        "scaler_type": "minmax"
+      },
+      "Seville_rain_1h": {
+        "scaler_type": "minmax"
+      },
+      "Valencia_rain_1h": {
+        "scaler_type": "minmax"
+      },
+      " Barcelona_rain_3h": {
+        "scaler_type": "minmax"
+      },
+      "Bilbao_rain_3h": {
+        "scaler_type": "minmax"
+      },
+      "Madrid_rain_3h": {
+        "scaler_type": "minmax"
+      },
+      "Seville_rain_3h": {
+        "scaler_type": "minmax"
+      },
+      "Valencia_rain_3h": {
+        "scaler_type": "minmax"
+      },
+      "generation hydro pumped storage consumption": {
+        "scaler_type": "minmax"
+      },
+      "generation hydro water reservoir": {
+        "scaler_type": "minmax"
+      },
+      "generation nuclear": {
+        "scaler_type": "minmax"
+      },
+      "generation solar": {
+        "scaler_type": "minmax"
+      },
+      "generation wind onshore": {
+        "scaler_type": "minmax"
+      }
+    }
+  }
+}

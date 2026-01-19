@@ -1,0 +1,69 @@
+{
+  "prefill_training_configs": true,
+  "custom_output_path": "",
+  "search_encoder": null,
+  "use_label_col_as_discrete_metadata": true,
+  "shuffle": true,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "twamp/twamp_dataset_2024-02-21-2024-02-25_top_100.parquet",
+  "window_size": 96,
+  "stride": 16,
+  "timestamps_col": [
+    "@timestamp"
+  ],
+  "group_labels": {
+    "cols": [
+      "sto_kng",
+      "sran_node_id"
+    ],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "counter.drop_mean_fwd",
+      "counter.drop_mean_rec",
+      "counter.jitter_mean_fwd",
+      "counter.jitter_mean_rec",
+      "counter.rtt_mean"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [
+      "label",
+      "sender_dscp",
+      "client_index",
+      "sender_index",
+      "client_dscp",
+      "connection"
+    ],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [
+      "distance_to_twamp_reflector_km",
+      "counter.rtt_max",
+      "counter.rtt_min",
+      "counter.jitter_max_fwd",
+      "counter.jitter_min_fwd",
+      "counter.jitter_max_rec",
+      "counter.jitter_min_rec",
+      "counter.drop_mean_peak_fwd",
+      "counter.drop_mean_peak_rec",
+      "counter.tx_pkt",
+      "counter.tx_pkt_reflector",
+      "counter.rx_pkt",
+      "counter.dscp",
+      "counter.lost_pkt_fwd",
+      "counter.lost_pkt_rec",
+      "counter.drop_mean_all",
+      "counter.success_rate_all",
+      "counter.drop_mean_rt_fwd",
+      "counter.drop_mean_peak_rt_fwd"
+    ],
+    "scalers": {}
+  }
+}

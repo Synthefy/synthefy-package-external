@@ -1,0 +1,21 @@
+device: "cuda"
+task: "synthesis"
+
+dataset_config:
+  dataset_name: traffic_volume
+  num_channels: 1
+  time_series_length: 96
+  required_time_series_length: 64
+  num_discrete_conditions: 135
+  num_continuous_labels: 4
+  discrete_condition_embedding_dim: 128
+  latent_dim: 48
+
+execution_config:
+  save_path: training_logs
+  run_name: march_20_2024
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+  
+postprocessing_config:
+  best_worst_windows_number: 10

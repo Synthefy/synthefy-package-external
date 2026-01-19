@@ -1,0 +1,53 @@
+{
+    "dataset_name": "ppg_hr_samsung",
+    "split_type": "test",
+    "window_filters": {
+        "metadata_range": {
+            "discrete_conditions": [
+                {
+                    "name": "SKIN",
+                    "options": [
+                        "3"
+                    ]
+                }
+            ],
+            "continuous_conditions": []
+        },
+        "group_label_cols": {
+            "name": "subject",
+            "options": [
+                "S1",
+                "S2"
+            ]
+        }
+    },
+    "metadata_variations": [
+        [
+            {
+                "name": "BVP",
+                "value": 1.1,
+                "perturbation_or_exact_value": "perturbation",
+                "perturbation_type": "divide"
+            },
+            {
+                "name": "heart_rate",
+                "value": 10,
+                "perturbation_or_exact_value": "perturbation",
+                "perturbation_type": "add"
+            },
+            {
+                "name": "SPORT",
+                "value": "6",
+                "perturbation_or_exact_value": "exact_value"
+            }
+        ],
+        [
+            {
+                "name": "SPORT",
+                "value": "5",
+                "perturbation_or_exact_value": "exact_value"
+            }
+        ]
+    ],
+    "output_path": "/home/raimi2/ppg_hr_samsung_test_bvp_1.1_hr_10_sport_6_v2.parquet"
+}

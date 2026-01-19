@@ -1,0 +1,118 @@
+device: cuda
+task: synthesis
+dataset_config:
+  dataset_name: ppg_hr
+  num_channels: 1
+  forecast_length: 128
+  time_series_length: 256
+  required_time_series_length: 256
+  num_discrete_conditions: 19
+  num_continuous_labels: 5
+  num_discrete_labels: 1
+  discrete_condition_embedding_dim: 64
+  latent_dim: 64
+  batch_size: 16
+  use_metadata: true
+  use_timestamp: false
+  num_timestamp_labels: 0
+denoiser_config:
+  denoiser_name: patched_diffusion_transformer
+  positional_embedding_dim: 128
+  channel_embedding_dim: 16
+  channels: 256
+  n_heads: 8
+  n_layers: 12
+  dropout_pos_enc: 0.2
+  use_metadata: true
+  use_periodic_projection: true
+  patch_len: 32
+  stride: 32
+  metadata_embedding_dim: 32
+metadata_encoder_config:
+  channels: 256
+  n_heads: 8
+  num_encoder_layers: 2
+execution_config:
+  save_path: training_logs
+  run_name: synthesis_ppg_hr
+  generation_save_path: generation_logs
+  experiment_name: Time_Series_Diffusion_Training
+training_config:
+  max_epochs: 500
+  learning_rate: 0.0001
+  n_plots: 4
+  auto_lr_find: true
+  check_val_every_n_epoch: 1
+  check_test_every_n_epoch: 5
+  log_every_n_steps: 1
+  num_devices: 8
+  strategy: ddp_find_unused_parameters_true
+
+
+
+#for evaluation TRTR (train real, test real), TSTR (train synthetic, test real), TRSTR (train real, synthetic, test synthetic)
+tstr_config:
+  classification_or_regression: "regression"
+
+  #only classification is supported for now
+  synthetic_or_original_or_custom: "synthetic"
+  train_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/ppg_hr/Time_Series_Diffusion_Training/synthesis_ppg_hr/train_dataset/
+      synthetic_or_original: "synthetic"
+
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/ppg_hr/Time_Series_Diffusion_Training/synthesis_ppg_hr/train_dataset/
+      synthetic_or_original: "original"
+
+  val_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/ppg_hr/Time_Series_Diffusion_Training/synthesis_ppg_hr/val_dataset/
+      synthetic_or_original: "synthetic"
+
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/ppg_hr/Time_Series_Diffusion_Training/synthesis_ppg_hr/val_dataset/
+      synthetic_or_original: "original"
+
+  test_dataset_paths: #note - only used for -> synthetic_or_original_or_custom: "custom" - point to all the files
+    - path: $SYNTHEFY_DATASETS_BASE/generation_logs/ppg_hr/Time_Series_Diffusion_Training/synthesis_ppg_hr/test_dataset/
+      synthetic_or_original: "original"
+
+  classifier:
+      model_name: resnet1d50
+
+  regressor:
+    model_name: resnet1d50
+
+  device: cuda
+  seed: 42
+  num_workers: 4
+  training:
+      learning_rate: 1e-3
+      max_epochs: 100
+      log_dir: /tmp/ppg_hr_tstr_training
+      check_val_every_n_epoch: 3
+      check_test_every_n_epoch: 3
+      num_devices: 1
+
+  dataset:
+    #TODO remove this redundancy
+    num_channels: 1
+    time_series_length: 256
+    required_time_series_length: 256
+    use_reduced_horizon: False # turn this to True when you want to use required_time_series_length as the features instead of time_series_length
+    batch_size: 2048
+
+    #classification:
+    multi_label: False
+    classification_use_condition_input: False
+    classification_original_discrete_labels: ["activity..."]
+    classification_original_discrete_input_cols: []
+    classification_continuous_input_cols: []
+    # classification_start_index: 0  # Check the output JSON file $SYNTHEFY_DATASETS_BASE/ppg_hr/discrete_windows_columns.json for column indices (in this case, we are doing skin color classification based on the time series data)
+    # classification_inclusive_end_index: 8 # Note - this is inclusive
+
+    #regression:
+    index_of_interest: 1 #integer - up to num_continuous_labels
+    continuous_col_of_interest: ["heart_rate"]
+    use_condition_input: False
+    continuous_input_channels: [] #up to num_continuous_labels
+    discrete_input_channels: [] # up to num_discrete_conditions
+    regression_original_discrete_input_cols: []
+    regression_continuous_input_cols: []

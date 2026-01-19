@@ -1,0 +1,122 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["title", "id", "text_descriptor", "frequency", "tags", "url", "license", "domain", "timezone", "columns"],
+    "definitions": {
+        "baseColumnSchema": {
+            "type": "object",
+            "required": ["title", "description", "type"],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Display title for the column"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of the column"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["text", "continuous", "discrete"],
+                    "description": "Type of the column"
+                },
+                "is_metadata": {
+                    "type": "boolean",
+                    "description": "Denotes the main column (all other columns are metadata)"
+                },
+                "units": {
+                    "type": "string",
+                    "description": "Units of measurement if applicable"
+                },
+                "column_id": {
+                    "type": "string",
+                    "description": "Name of the column in dataframe"
+                },
+                "start_time": {
+                    "optional": true,
+                    "type": "string",
+                    "description": "Start time of the column"
+                },
+                "end_time": {
+                    "optional": true,
+                    "type": "string",
+                    "description": "End time of the column"
+                },
+                "prefill_length": {
+                    "optional": true,
+                    "type": "integer",
+                    "description": "length of column before padding (note this might be coerced to a string for the type checker)"
+                }
+            }
+        }
+    },
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Name of the dataset, often matches the title of the main column"
+        },
+        "text_descriptor": {
+            "type": "string",
+            "description": "General description/blurb about the dataset"
+        },
+        "frequency": {
+            "type": "string",
+            "description": "The frequency of the time series data (e.g., minutely, hourly, daily...) Currently, no standardized handling for non-canonical frequencies (3 daily, bi-yearly, etc.)",
+            "pattern": "^\\[Minutely|Hourly|Daily|Weekly|Monthly|Quarterly|Yearly|Transaction]$"
+        },
+        "tags": {
+            "type": "array",
+            "description": "List of tags to categorize the dataset",
+            "items": {
+                "type": "string"
+            },
+            "default": []
+        },
+        "license": {
+            "type": "string",
+            "description": "Name of the license (e.g., 'MIT', 'Apache-2.0', 'GPL-3.0')"
+        },
+        "domain": {
+            "type": "string",
+            "description": "The domain of the dataset"
+        },
+        "timezone": {
+            "type": "string",
+            "description": "The timezone offset from GMT (e.g., 'GMT+0', 'GMT+8', 'GMT-5')",
+            "pattern": "^GMT[+-][0-9]{1,2}(:[0-9]{2})?$",
+            "default": "GMT+0"
+        },
+        "timezone_guessed": {
+            "type": "boolean",
+            "description": "Whether the timezone was guessed or not"
+        },
+        "size": {
+            "type": "number",
+            "description": "The size of the dataset in bytes"
+        },
+        "length": {
+            "type": "number",
+            "description": "The number of rows in the dataset"
+        },
+        "num_columns": {
+            "type": "number",
+            "description": "The number of columns in the dataset"
+        },
+        "start_date": {
+            "type": "string",
+            "description": "The start date of the dataset"
+        },
+        "end_date": {
+            "type": "string",
+            "description": "The end date of the dataset"
+        },
+        "columns": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    { "$ref": "#/definitions/baseColumnSchema" }
+                ]
+            }
+        }
+    }
+}

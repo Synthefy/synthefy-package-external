@@ -1,0 +1,60 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": true,
+  "add_fourier": false,
+  "fourier_params": {
+    "num_coefficients": 25,
+    "label_num": 2
+  },
+  "add_tektronix_features": false,
+  "tektronix_params": {
+    "time_to_switch": 6,
+    "label_dict_ch1": {
+      "00": -0.1,
+      "01": 0,
+      "10": 0.11,
+      "11": 0.11
+    },
+    "label_dict_ch2": {
+      "00": -0.1,
+      "01": 0,
+      "10": 0.12,
+      "11": 0.12
+    }
+  },
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "tektronix/bitstream_chunk.parquet",
+  "channel_label": 2,
+  "timestamps_col": [],
+  "window_size": 60,
+  "stride": 6,
+  "group_labels": {
+    "cols": [],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "timeseries"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [
+      "tektronix_label"
+    ],
+    "scalers": {
+      "tektronix_label": {
+        "scaler_type": "onehot"
+      }
+    }
+  },
+  "continuous": {
+    "cols": [],
+    "scalers": {}
+  }
+}

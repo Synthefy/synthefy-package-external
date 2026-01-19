@@ -1,0 +1,115 @@
+# TabICL Training Configuration
+
+# Prior Dataset Config
+prior_dir:  /workspace/data/synthetic_data/medium_series_batched # null for generating on the fly
+load_prior_start: 0
+delete_after_load: false
+batch_size_per_gp: 4
+min_features: 5
+max_features: 45 # 100 # Must match num_correlates - 1 in dataset_config
+max_classes: 10 # 10
+min_seq_len: null
+max_seq_len: 768 # 1024 # Must match time_series_length in dataset_config
+log_seq_len: false
+seq_len_per_gp: false
+min_train_size: 0.1
+max_train_size: 0.9
+replay_small: false
+prior_type: mix_scm
+prior_device: cpu  # Example: Using GPU 5 for prior data generation
+is_regression: true  # Set to true for regression tasks
+row_missing_prob: 0.0
+column_has_missing_prob: 0.0
+dataset_length: 5000
+dataset_has_lag: 0.5 # CHANGED
+max_lag: 0.1
+exclude_inputs: "allow"
+add_synthetic_timestamps:
+  - "minutely"
+  - "hourly"
+  - "daily"
+  - "weekly"
+  - "monthly"
+respect_ancestry_for_lag: true
+
+# SCM Prior Config - Fixed Hyperparameters
+scm_mix_probs: [0.7, 0.3]  # Mix probabilities for MLP vs Tree SCM
+scm_tree_model: xgboost  # Tree model type for TreeSCM
+scm_tree_depth_lambda: 0.5  # Lambda for tree depth sampling
+scm_tree_n_estimators_lambda: 0.5  # Lambda for number of estimators sampling
+scm_balanced: false  # Whether to balance classes
+scm_multiclass_ordered_prob: 0.0  # Probability of ordered multiclass
+scm_cat_prob: 0.2  # Probability of categorical features
+scm_max_categories: .inf  # Maximum number of categories
+scm_scale_by_max_features: false  # Whether to scale by max features
+scm_permute_features: true  # Whether to permute features
+scm_permute_labels: true  # Whether to permute labels
+scm_sigmoid_mixed_sampling_rate: 7.0
+# SCM Prior Config - Sampled Hyperparameters
+scm_multiclass_type:
+  distribution: meta_choice
+  choice_values: [value, rank]
+# scm_mlp_activations Will use default from TabICLConfig
+scm_block_wise_dropout:
+  distribution: meta_choice
+  choice_values: [false, true]
+scm_mlp_dropout_prob:
+  distribution: meta_beta
+  scale: 0.9
+  min: 0.1
+  max: 5.0
+scm_is_causal:
+  distribution: meta_choice
+  choice_values: [true]
+scm_num_causes:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 12 # 12
+  min_mean: 7 # 1
+  round: true
+  lower_bound: 1
+scm_y_is_effect:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_in_clique:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_sort_features:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_num_layers:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 2.0
+  min_mean: 0.1
+  round: true
+  lower_bound: 3
+scm_hidden_dim:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 30
+  min_mean: 10
+  round: true
+  lower_bound: 10
+scm_init_std:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 10.0
+  min_mean: 0.01
+  round: false
+  lower_bound: 0.0
+scm_noise_std:
+  distribution: meta_trunc_norm_log_scaled
+  max_mean: 0.1
+  min_mean: 0.0001
+  round: false
+  lower_bound: 0.0
+scm_used_sampler:
+  distribution: meta_choice
+  choice_values: [ts] # [ts, tabular] # CHANGED
+  # choice_1_weight: -0.38 # choice 0 weight is 1 by default, weight is softmaxed to get probabilities
+scm_sampling:
+  distribution: meta_choice
+  choice_values: [mixed_all] # CHANGED
+scm_pre_sample_cause_stats:
+  distribution: meta_choice
+  choice_values: [true, false]
+scm_pre_sample_noise_std:
+  distribution: meta_choice
+  choice_values: [true, false]

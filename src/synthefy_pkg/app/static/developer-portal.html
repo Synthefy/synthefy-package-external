@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthefy Developer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .doc-link {
+            display: block;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1f2937;
+            transition: all 0.2s;
+        }
+
+        .doc-link:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .doc-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .code-sample {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #374151;
+            color: #f9fafb;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background: #4b5563;
+        }
+
+        .example-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .endpoint-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .endpoint-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .endpoint-method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+
+        .method-get { background: #dcfce7; color: #166534; }
+        .method-post { background: #dbeafe; color: #1d4ed8; }
+        .method-put { background: #fef3c7; color: #92400e; }
+        .method-delete { background: #fee2e2; color: #991b1b; }
+
+        .endpoint-path {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-weight: 500;
+        }
+
+        .endpoint-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Synthefy Developer Portal</h1>
+            <p>Comprehensive APIs for time series analysis, forecasting, and synthesis</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="grid">
+                <!-- API Documentation -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">API Documentation</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="docs-grid">
+                            <a href="/docs" class="doc-link">
+                                <div class="doc-title">Interactive API Docs</div>
+                                <div class="doc-description">Swagger UI with try-it-out functionality</div>
+                            </a>
+                            <a href="/documents" class="doc-link">
+                                <div class="doc-title">API Reference</div>
+                                <div class="doc-description">Clean, comprehensive Redoc documentation</div>
+                            </a>
+                            <a href="/openapi.json" class="doc-link">
+                                <div class="doc-title">OpenAPI Spec</div>
+                                <div class="doc-description">Download the raw OpenAPI specification</div>
+                            </a>
+                        </div>
+
+                        <!-- Authentication Example -->
+                        <div class="example-section">
+                            <h3 class="example-title">Authentication</h3>
+                            <p style="color: #6b7280; margin-bottom: 1rem;">
+                                Include your API key in the request headers:
+                            </p>
+                            <div class="code-sample">
+                                <button class="copy-button" onclick="copyToClipboard('authExample')">Copy</button>
+                                <pre id="authExample">curl -X GET "https://api.synthefy.com/api/health" \
+  -H "X-API-Key: your-api-key-here" \
+  -H "Content-Type: application/json"</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Examples -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">API Examples</h2>
+                    </div>
+                    <div class="card-content">
+                        <!-- Health Check -->
+                        <div class="example-section">
+                            <h3 class="example-title">Health Check</h3>
+                            <div class="code-sample">
+                                <button class="copy-button" onclick="copyToClipboard('healthExample')">Copy</button>
+                                <pre id="healthExample">curl -X GET "https://api.synthefy.com/api/health" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json"</pre>
+                            </div>
+                        </div>
+
+                        <!-- Forecasting Example -->
+                        <div class="example-section">
+                            <h3 class="example-title">Time Series Forecasting</h3>
+                            <div class="code-sample">
+                                <button class="copy-button" onclick="copyToClipboard('forecastExample')">Copy</button>
+                                <pre id="forecastExample">curl -X POST "https://api.synthefy.com/api/forecast" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "your-user-id",
+    "config": {
+      "file_path_key": "path/to/your/data.parquet",
+      "model_type": "synthefy-forecasting",
+      "forecast_length": 30,
+      "timeseries_columns": ["value"],
+      "timestamp_column": "timestamp",
+      "covariate_columns": [],
+      "do_llm_explanation": false
+    }
+  }'</pre>
+                            </div>
+                        </div>
+
+                        <!-- Synthesis Example -->
+                        <div class="example-section">
+                            <h3 class="example-title">Data Synthesis</h3>
+                            <div class="code-sample">
+                                <button class="copy-button" onclick="copyToClipboard('synthesisExample')">Copy</button>
+                                <pre id="synthesisExample">curl -X POST "https://api.synthefy.com/api/synthesis" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "your-user-id",
+    "config": {
+      "file_path_key": "path/to/your/data.parquet",
+      "model_type": "synthefy-synthesis",
+      "num_samples": 1000,
+      "timeseries_columns": ["value"],
+      "timestamp_column": "timestamp"
+    }
+  }'</pre>
+                            </div>
+                        </div>
+
+                        <!-- Anomaly Detection Example -->
+                        <div class="example-section">
+                            <h3 class="example-title">Anomaly Detection</h3>
+                            <div class="code-sample">
+                                <button class="copy-button" onclick="copyToClipboard('anomalyExample')">Copy</button>
+                                <pre id="anomalyExample">curl -X POST "https://api.synthefy.com/api/zero_shot_anomaly" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "your-user-id",
+    "config": {
+      "file_path_key": "path/to/your/data.parquet",
+      "timeseries_columns": ["value"],
+      "timestamp_column": "timestamp",
+      "threshold": 0.8
+    }
+  }'</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Endpoints -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Common Endpoints</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="endpoint-list">
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-get">GET</span>
+                            <span class="endpoint-path">/api/health</span>
+                            <div class="endpoint-description">Check API health status</div>
+                        </li>
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-post">POST</span>
+                            <span class="endpoint-path">/api/forecast</span>
+                            <div class="endpoint-description">Generate time series forecasts</div>
+                        </li>
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-post">POST</span>
+                            <span class="endpoint-path">/api/synthesis</span>
+                            <div class="endpoint-description">Generate synthetic time series data</div>
+                        </li>
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-post">POST</span>
+                            <span class="endpoint-path">/api/zero_shot_anomaly</span>
+                            <div class="endpoint-description">Detect anomalies in time series data</div>
+                        </li>
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-post">POST</span>
+                            <span class="endpoint-path">/api/train</span>
+                            <div class="endpoint-description">Train custom models</div>
+                        </li>
+                        <li class="endpoint-item">
+                            <span class="endpoint-method method-get">GET</span>
+                            <span class="endpoint-path">/api/view</span>
+                            <div class="endpoint-description">View data and results</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Start Guide -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Quick Start Guide</h2>
+                </div>
+                <div class="card-content">
+                    <ol style="padding-left: 1.5rem; color: #6b7280;">
+                        <li style="margin-bottom: 0.5rem;">Obtain your API key from your account settings</li>
+                        <li style="margin-bottom: 0.5rem;">Include the API key in all requests using the <code>X-API-Key</code> header</li>
+                        <li style="margin-bottom: 0.5rem;">Test connectivity with the <code>/api/health</code> endpoint</li>
+                        <li style="margin-bottom: 0.5rem;">Explore the interactive documentation at <code>/docs</code></li>
+                        <li style="margin-bottom: 0.5rem;">Use the examples above as templates for your requests</li>
+                    </ol>
+
+                    <div style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+                        <h4 style="margin-bottom: 0.5rem; font-weight: 600;">Rate Limits</h4>
+                        <p style="font-size: 0.875rem; color: #6b7280;">
+                            Rate limits vary by plan and endpoint. Check response headers for current limits and remaining quota.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Need Help?</h2>
+                </div>
+                <div class="card-content">
+                    <div class="grid">
+                        <div>
+                            <h3 style="font-weight: 600; margin-bottom: 0.5rem;">Documentation</h3>
+                            <p style="color: #6b7280; margin-bottom: 1rem;">
+                                Comprehensive guides and API references to get you started quickly.
+                            </p>
+                            <a href="/docs" class="btn btn-secondary">View Interactive Docs</a>
+                        </div>
+                        <div>
+                            <h3 style="font-weight: 600; margin-bottom: 0.5rem;">Support</h3>
+                            <p style="color: #6b7280; margin-bottom: 1rem;">
+                                Get help from our team or browse community discussions.
+                            </p>
+                            <a href="mailto:support@synthefy.com" class="btn btn-secondary">Contact Support</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary success feedback
+                const button = element.parentElement.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#374151';
+                }, 2000);
+            }).catch(() => {
+                console.error('Failed to copy to clipboard');
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,15 @@
+{
+  "timestamps_col": "Date",
+  "timeseries": {
+    "cols": ["Weekly_Sales", "Temperature", "Fuel_Price", "CPI", "Unemployment"]
+  },
+  "continuous": {
+    "cols": ["Weekly_Sales", "Temperature", "Fuel_Price", "CPI", "Unemployment"]
+  },
+  "discrete": {
+    "cols": ["Store", "Holiday_Flag"]
+  },
+  "group_labels": {
+    "cols": ["Store"]
+  }
+}

@@ -1,0 +1,23 @@
+input_base_dir: /Users/bekzatajan/Synthefy/projects/synthefy-package
+output_dir: /Users/bekzatajan/Synthefy/projects/synthefy-package/foundation_model_data_tmp
+
+# Processing parameters
+window_size: 50
+stride: 10
+batch_size: 128
+num_workers: 32
+
+shuffle: True
+train_ratio: 0.8
+val_ratio: 0.1
+test_ratio: 0.1
+
+# Metadata types to use in processing
+metadata_types_to_use:
+  - timestamp
+  - dataset_description
+  - text_description
+  - continuous
+  - retrieved_timeseries
+  - time_varying_textual_metadata
+

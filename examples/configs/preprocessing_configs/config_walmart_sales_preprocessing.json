@@ -1,0 +1,52 @@
+{
+  "prefill_training_configs": true,
+  "use_label_col_as_discrete_metadata": true,
+  "window_from_beginning": false,
+  "shuffle": true,
+  "add_lag_data": true,
+  "train_val_split": {
+    "train": 0.8,
+    "val": 0.1
+  },
+  "filename": "walmart_sales/merged_features_train.parquet",
+  "window_size": 14,
+  "stride": 4,
+  "timestamps_col": [
+    "Date"
+  ],
+  "group_labels": {
+    "cols": [
+      "Store",
+      "Dept"
+    ],
+    "scalers": {}
+  },
+  "timeseries": {
+    "cols": [
+      "Weekly_Sales"
+    ],
+    "scalers": {}
+  },
+  "discrete": {
+    "cols": [
+      "IsHoliday",
+      "Type"
+    ],
+    "scalers": {}
+  },
+  "continuous": {
+    "cols": [
+      "Size",
+      "Temperature",
+      "Fuel_Price",
+      "MarkDown1",
+      "MarkDown2",
+      "MarkDown3",
+      "MarkDown4",
+      "MarkDown5",
+      "CPI",
+      "Unemployment"
+    ],
+    "scalers": {}
+  }
+}

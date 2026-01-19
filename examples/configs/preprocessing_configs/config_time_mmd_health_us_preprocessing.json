@@ -1,0 +1,55 @@
+{
+    "prefill_training_configs": true,
+    "use_label_col_as_discrete_metadata": true,
+    "window_from_beginning": false,
+    "shuffle": false,
+    "train_val_split": {
+        "train": 0.8,
+        "val": 0.1
+    },
+    "filename": "time_mmd_health_us/health_us_merged.parquet",
+    "freq": "M",
+    "window_size": 256,
+    "stride": 8,
+    "timestamps_col": [
+        "date"
+    ],
+    "group_labels": {
+        "cols": [],
+        "scalers": {}
+    },
+    "timeseries": {
+        "cols": [
+            "OT"
+        ],
+        "scalers": {}
+    },
+    "discrete": {
+        "cols": [
+        ],
+        "scalers": {}
+    },
+    "continuous": {
+        "bad_cols_have_non_numeric_values": [
+            "AGE 25-49",
+            "AGE 25-64",
+            "AGE 50-64"
+        ],
+        "cols": [            
+            "% WEIGHTED ILI",
+            "AGE 0-4",
+            "AGE 5-24",
+            "AGE 65",
+            "ILITOTAL",
+            "NUM. OF PROVIDERS",
+            "TOTAL PATIENTS"
+        ],
+        "scalers": {}
+    },
+    "text_metadata": {
+        "text_col_name": "text_metadata",
+        "model": {
+            "name": "sentence-transformers/all-MiniLM-L6-v2"
+        }
+    }
+}
