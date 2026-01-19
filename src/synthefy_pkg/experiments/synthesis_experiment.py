@@ -56,7 +56,7 @@ from synthefy_pkg.utils.synthesis_utils import (
     generate_synthetic_dataset,
     load_synthesis_model,
     projected_synthesis_via_diffusion,
-    synthesis_via_projected_diffusion,
+    # synthesis_via_projected_diffusion,
 )
 
 SYNTHEFY_PACKAGE_BASE = str(os.getenv("SYNTHEFY_PACKAGE_BASE"))
@@ -434,9 +434,7 @@ class SynthesisExperiment(Experiment):
             synthesis_function = partial(forecast_via_diffusion, forecast_length=self.forecast_length)
         else:
             synthesis_function = (
-                synthesis_via_projected_diffusion
-                if self.configuration.dataset_config.use_constraints
-                else get_synthesis_via_diffusion
+                get_synthesis_via_diffusion
             )
 
         ### above is same as generate_synthetic_data, but for one window only. ### --> TODO make a helper function
@@ -551,9 +549,7 @@ class SynthesisExperiment(Experiment):
             synthesis_function = partial(forecast_via_diffusion, forecast_length=self.forecast_length)
         else:
             synthesis_function = (
-                synthesis_via_projected_diffusion
-                if self.configuration.dataset_config.use_constraints
-                else get_synthesis_via_diffusion
+                get_synthesis_via_diffusion
             )
 
         # Get base save directory - handle SageMaker paths

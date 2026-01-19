@@ -2055,3 +2055,411 @@ PermissionError: [Errno 13] Permission denied: '/home/raimi/.synthefy/model'
 2026-01-19 17:20:53.901 | INFO     | services.demo_synthesis_service:experiment:198 - Using denoiser: flexible_patched_diffusion_transformer for model_type: flexible
 2026-01-19 17:20:53.901 | INFO     | services.demo_synthesis_service:experiment:201 - Using task_type: synthesis
 2026-01-19 17:20:53.907 | WARNING  | synthefy_pkg.configs.dataset_configs:set_constraint_parameters:137 - Will use predetermined_constraint_values from saved constraints from preprocessing
+2026-01-19 22:06:54.820 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:06:54.821 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: ['onehot']
+2026-01-19 22:06:54.821 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:06:54.821 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset
+2026-01-19 22:06:54.822 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:06:54.822 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:06:54.822 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:06:54.822 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:06:54.822 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:06:54.823 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:06:54.823 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.824 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:06:54.825 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:06:54.825 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:06:54.825 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:06:54.825 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:06:54.825 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:06:54.825 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:06:54.826 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:06:54.831 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:06:54.831 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:06:54.835 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:06:54.835 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:06:54.835 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:06:54.835 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:06:54.836 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:06:54.836 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:06:54.836 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:06:54.836 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:06:54.837 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:06:54.838 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1267 - Using saved encoder for: onehot
+2026-01-19 22:06:54.840 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 2
+2026-01-19 22:06:54.842 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:06:54.842 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:06:54.842 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:06:54.843 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 13)
+2026-01-19 22:06:54.843 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:06:54.844 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 2, num_original_discrete: 1
+2026-01-19 22:06:54.844 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 13)
+2026-01-19 22:06:54.950 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:06:54.950 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 2)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:06:54.951 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:06:54.956 | INFO     | synthefy_pkg.utils.scaling_utils:transform_using_scaler:616 - Transforming windows of type `continuous` with scalers: {'awake_mins': [{'scaler': StandardScaler()}], 'age': [{'scaler': StandardScaler()}], 'low_activity_time': [{'scaler': StandardScaler()}], 'deep_mins': [{'scaler': StandardScaler()}], 'sleep_duration': [{'scaler': StandardScaler()}], 'restored_duration': [{'scaler': StandardScaler()}], 'non_wear_time': [{'scaler': StandardScaler()}], 'rem_mins': [{'scaler': StandardScaler()}], 'steps': [{'scaler': StandardScaler()}], 'active_calories': [{'scaler': StandardScaler()}]}
+2026-01-19 22:06:58.241 | INFO     | services.demo_synthesis_service:generate:430 - Running synthesis model inference...
+2026-01-19 22:06:58.241 | INFO     | services.demo_synthesis_service:generate:431 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 2)
+2026-01-19 22:06:58.241 | INFO     | services.demo_synthesis_service:generate:463 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:06:58.241 | INFO     | services.demo_synthesis_service:generate:476 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 2)
+2026-01-19 22:13:29.993 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:13:29.993 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: ['onehot']
+2026-01-19 22:13:29.993 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:13:29.994 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset
+2026-01-19 22:13:29.994 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:13:29.994 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:13:29.994 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:13:29.994 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:13:29.994 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:13:29.994 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:13:29.995 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:13:29.995 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:13:29.995 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:13:29.995 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:13:29.995 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:13:29.995 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.995 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.995 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.995 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:29.996 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:13:29.996 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:13:29.997 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:13:29.997 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:13:29.997 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:13:29.997 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:13:29.998 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:13:30.002 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:13:30.003 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:13:30.007 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:13:30.007 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:13:30.007 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:13:30.007 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:13:30.008 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:13:30.008 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:13:30.008 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:13:30.008 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:13:30.009 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:13:30.010 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1267 - Using saved encoder for: onehot
+2026-01-19 22:13:30.012 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 2
+2026-01-19 22:13:30.013 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:13:30.014 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:13:30.014 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:13:30.015 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 13)
+2026-01-19 22:13:30.015 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:13:30.015 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 2, num_original_discrete: 1
+2026-01-19 22:13:30.015 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 13)
+2026-01-19 22:13:30.114 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:13:30.114 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:13:30.114 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 2)
+2026-01-19 22:13:30.115 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:13:30.115 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:13:30.115 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:13:30.115 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:13:30.115 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:13:30.116 | INFO     | synthefy_pkg.utils.scaling_utils:transform_using_scaler:616 - Transforming windows of type `continuous` with scalers: {'awake_mins': [{'scaler': StandardScaler()}], 'age': [{'scaler': StandardScaler()}], 'low_activity_time': [{'scaler': StandardScaler()}], 'deep_mins': [{'scaler': StandardScaler()}], 'sleep_duration': [{'scaler': StandardScaler()}], 'restored_duration': [{'scaler': StandardScaler()}], 'non_wear_time': [{'scaler': StandardScaler()}], 'rem_mins': [{'scaler': StandardScaler()}], 'steps': [{'scaler': StandardScaler()}], 'active_calories': [{'scaler': StandardScaler()}]}
+2026-01-19 22:13:31.111 | INFO     | services.demo_synthesis_service:generate:427 - Running synthesis model inference...
+2026-01-19 22:13:31.111 | INFO     | services.demo_synthesis_service:generate:428 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 2)
+2026-01-19 22:13:31.111 | INFO     | services.demo_synthesis_service:generate:460 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:13:31.111 | INFO     | services.demo_synthesis_service:generate:473 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 2)
+2026-01-19 22:13:57.449 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:13:57.449 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: ['onehot']
+2026-01-19 22:13:57.450 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:13:57.450 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset
+2026-01-19 22:13:57.451 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:13:57.451 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:13:57.451 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:13:57.451 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:13:57.451 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:13:57.451 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:13:57.451 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:13:57.452 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:13:57.452 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:13:57.452 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:13:57.452 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:13:57.452 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.452 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.452 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.452 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:13:57.453 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:13:57.453 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:13:57.454 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:13:57.454 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:13:57.454 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:13:57.454 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:13:57.455 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:13:57.460 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:13:57.460 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:13:57.464 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:13:57.464 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:13:57.464 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:13:57.465 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:13:57.465 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:13:57.465 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:13:57.465 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:13:57.465 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:13:57.467 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:13:57.467 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1267 - Using saved encoder for: onehot
+2026-01-19 22:13:57.469 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 2
+2026-01-19 22:13:57.471 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:13:57.471 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:13:57.471 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:13:57.472 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 13)
+2026-01-19 22:13:57.472 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:13:57.473 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 2, num_original_discrete: 1
+2026-01-19 22:13:57.473 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 13)
+2026-01-19 22:13:57.575 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:13:57.575 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:13:57.575 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 2)
+2026-01-19 22:13:57.576 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:13:57.576 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:13:57.576 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:13:57.576 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:13:57.576 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:13:57.577 | INFO     | synthefy_pkg.utils.scaling_utils:transform_using_scaler:616 - Transforming windows of type `continuous` with scalers: {'awake_mins': [{'scaler': StandardScaler()}], 'age': [{'scaler': StandardScaler()}], 'low_activity_time': [{'scaler': StandardScaler()}], 'deep_mins': [{'scaler': StandardScaler()}], 'sleep_duration': [{'scaler': StandardScaler()}], 'restored_duration': [{'scaler': StandardScaler()}], 'non_wear_time': [{'scaler': StandardScaler()}], 'rem_mins': [{'scaler': StandardScaler()}], 'steps': [{'scaler': StandardScaler()}], 'active_calories': [{'scaler': StandardScaler()}]}
+2026-01-19 22:13:58.573 | INFO     | services.demo_synthesis_service:generate:427 - Running synthesis model inference...
+2026-01-19 22:13:58.573 | INFO     | services.demo_synthesis_service:generate:428 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 2)
+2026-01-19 22:13:58.573 | INFO     | services.demo_synthesis_service:generate:460 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:13:58.573 | INFO     | services.demo_synthesis_service:generate:473 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 2)
+2026-01-19 22:15:48.589 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:15:48.590 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: ['onehot']
+2026-01-19 22:15:48.590 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:15:48.590 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset
+2026-01-19 22:15:48.591 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:15:48.591 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:15:48.591 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:15:48.591 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:15:48.591 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:15:48.592 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:15:48.592 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:15:48.592 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:15:48.592 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:15:48.592 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:15:48.593 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:15:48.593 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.593 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.593 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.594 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.594 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.594 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.594 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.594 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.595 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.595 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:15:48.595 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:15:48.595 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:15:48.596 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:15:48.596 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:15:48.596 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:15:48.596 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:15:48.597 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:15:48.602 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:15:48.602 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:15:48.607 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:15:48.607 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:15:48.607 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:15:48.608 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:15:48.608 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:15:48.608 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:15:48.609 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:15:48.609 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:15:48.610 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:15:48.611 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1267 - Using saved encoder for: onehot
+2026-01-19 22:15:48.613 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 2
+2026-01-19 22:15:48.615 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:15:48.615 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:15:48.615 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:15:48.616 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 13)
+2026-01-19 22:15:48.616 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:15:48.617 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 2, num_original_discrete: 1
+2026-01-19 22:15:48.617 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 13)
+2026-01-19 22:15:48.722 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:15:48.722 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:15:48.722 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 2)
+2026-01-19 22:15:48.723 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:15:48.723 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:15:48.723 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:15:48.723 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:15:48.723 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:15:48.724 | INFO     | synthefy_pkg.utils.scaling_utils:transform_using_scaler:616 - Transforming windows of type `continuous` with scalers: {'awake_mins': [{'scaler': StandardScaler()}], 'age': [{'scaler': StandardScaler()}], 'low_activity_time': [{'scaler': StandardScaler()}], 'deep_mins': [{'scaler': StandardScaler()}], 'sleep_duration': [{'scaler': StandardScaler()}], 'restored_duration': [{'scaler': StandardScaler()}], 'non_wear_time': [{'scaler': StandardScaler()}], 'rem_mins': [{'scaler': StandardScaler()}], 'steps': [{'scaler': StandardScaler()}], 'active_calories': [{'scaler': StandardScaler()}]}
+2026-01-19 22:15:49.744 | INFO     | services.demo_synthesis_service:generate:427 - Running synthesis model inference...
+2026-01-19 22:15:49.744 | INFO     | services.demo_synthesis_service:generate:428 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 2)
+2026-01-19 22:15:49.744 | INFO     | services.demo_synthesis_service:generate:460 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:15:49.745 | INFO     | services.demo_synthesis_service:generate:473 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 2)
+2026-01-19 22:15:56.114 | INFO     | services.demo_synthesis_service:experiment:172 - Loading synthesis config from: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/synthesis_configs/config_oura_subset_synthesis.yaml
+2026-01-19 22:15:56.122 | INFO     | services.demo_synthesis_service:experiment:196 - Set random inference_seed: 62171
+2026-01-19 22:15:56.123 | INFO     | services.demo_synthesis_service:experiment:198 - Using denoiser: flexible_patched_diffusion_transformer for model_type: flexible
+2026-01-19 22:15:56.123 | INFO     | services.demo_synthesis_service:experiment:201 - Using task_type: synthesis
+2026-01-19 22:15:56.130 | WARNING  | synthefy_pkg.configs.dataset_configs:set_constraint_parameters:137 - Will use predetermined_constraint_values from saved constraints from preprocessing
+2026-01-19 22:16:37.696 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:16:37.696 | ERROR    | synthefy_pkg.utils.basic_utils:load_pickle_from_path:148 - File not found: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset/timeseries_scalers.pkl. Returning default value: {}
+2026-01-19 22:16:37.697 | ERROR    | synthefy_pkg.utils.basic_utils:load_pickle_from_path:148 - File not found: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset/continuous_scalers.pkl. Returning default value: {}
+2026-01-19 22:16:37.697 | ERROR    | synthefy_pkg.utils.basic_utils:load_pickle_from_path:148 - File not found: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset/encoders_dict.pkl. Returning default value: {}
+2026-01-19 22:16:37.697 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: none
+2026-01-19 22:16:37.697 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:16:37.698 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/SageMaker/synthefy-package-external/data/oura_subset
+2026-01-19 22:16:37.698 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:16:37.698 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:16:37.698 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:16:37.699 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:16:37.699 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:16:37.699 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:16:37.699 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:16:37.699 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:16:37.700 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:16:37.700 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:16:37.700 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:16:37.700 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.700 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.701 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.701 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.701 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.701 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.701 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.702 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.702 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.702 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:16:37.702 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:16:37.703 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:16:37.703 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:16:37.703 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:16:37.703 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:16:37.704 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:16:37.705 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:16:37.709 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:16:37.709 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:16:37.714 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:16:37.714 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:16:37.714 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:16:37.715 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:16:37.715 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:16:37.715 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:16:37.716 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:16:37.716 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:16:37.717 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:16:37.718 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1257 - Generating encoder for: onehot
+2026-01-19 22:16:37.720 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 1
+2026-01-19 22:16:37.722 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:16:37.722 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:16:37.722 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:16:37.724 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 12)
+2026-01-19 22:16:37.724 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:16:37.724 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 1, num_original_discrete: 1
+2026-01-19 22:16:37.724 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 12)
+2026-01-19 22:16:37.822 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:16:37.822 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:16:37.822 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 1)
+2026-01-19 22:16:37.822 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:16:37.823 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:16:37.823 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:16:37.823 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:16:37.823 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:16:37.823 | WARNING  | synthefy_pkg.utils.scaling_utils:transform_using_scaler:608 - Empty scalers dictionary provided for continuous. Returning original windows.
+2026-01-19 22:16:37.824 | INFO     | services.demo_synthesis_service:generate:427 - Running synthesis model inference...
+2026-01-19 22:16:37.824 | INFO     | services.demo_synthesis_service:generate:428 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 1)
+2026-01-19 22:16:37.825 | INFO     | services.demo_synthesis_service:generate:460 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:16:37.825 | INFO     | services.demo_synthesis_service:generate:473 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 1)
+2026-01-19 22:16:45.041 | INFO     | services.demo_synthesis_service:experiment:172 - Loading synthesis config from: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/synthesis_configs/config_oura_subset_synthesis.yaml
+2026-01-19 22:16:45.049 | INFO     | services.demo_synthesis_service:experiment:196 - Set random inference_seed: 11098
+2026-01-19 22:16:45.049 | INFO     | services.demo_synthesis_service:experiment:198 - Using denoiser: flexible_patched_diffusion_transformer for model_type: flexible
+2026-01-19 22:16:45.049 | INFO     | services.demo_synthesis_service:experiment:201 - Using task_type: synthesis
+2026-01-19 22:16:45.057 | WARNING  | synthefy_pkg.configs.dataset_configs:set_constraint_parameters:137 - Will use predetermined_constraint_values from saved constraints from preprocessing
+2026-01-19 22:17:27.341 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:150 - Loading scalers and encoders for dataset: oura_subset
+2026-01-19 22:17:27.342 | INFO     | services.demo_synthesis_service:_load_scalers_and_encoders:158 - Loaded encoders: ['onehot']
+2026-01-19 22:17:27.342 | WARNING  | synthefy_pkg.preprocessing.base_config:get_configs:184 - Using configuration from file: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/preprocessing_configs/config_oura_subset_preprocessing.json
+2026-01-19 22:17:27.343 | WARNING  | synthefy_pkg.preprocessing.base_config:__post_init__:139 - Using DEFAULT output path: /home/ec2-user/data/oura_subset
+2026-01-19 22:17:27.343 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:734 - Memory monitoring not enabled: invalid configuration
+2026-01-19 22:17:27.343 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_config:1071 - Train stride: 32, Val stride: 32, Test stride: 32
+2026-01-19 22:17:27.343 | WARNING  | synthefy_pkg.preprocessing.preprocess:__post_init__:757 - Shuffle is set to False in the preprocessing config file. Verify this is intended.
+2026-01-19 22:17:27.344 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:764 - Window size: 192
+2026-01-19 22:17:27.344 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:765 - Stride: 32
+2026-01-19 22:17:27.344 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:767 - Group labels: ['user_id']
+2026-01-19 22:17:27.344 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:768 - Timeseries columns: 3
+2026-01-19 22:17:27.345 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:769 - Continuous columns: 10
+2026-01-19 22:17:27.345 | INFO     | synthefy_pkg.preprocessing.preprocess:__post_init__:770 - Discrete columns: 1
+2026-01-19 22:17:27.345 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:17:27.345 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:17:27.345 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `awake_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.346 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `age` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.346 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `low_activity_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.346 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `deep_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.346 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `sleep_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.347 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `restored_duration` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.347 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `non_wear_time` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.347 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `rem_mins` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.347 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `steps` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.347 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `active_calories` of `continuous`, using default 'standard' scaler info.
+2026-01-19 22:17:27.348 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:17:27.348 | WARNING  | synthefy_pkg.preprocessing.preprocess:validate_scalers:1153 - Scaler info not specified for `gender_male` of `discrete`, using default 'onehot' scaler info.
+2026-01-19 22:17:27.348 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:17:27.349 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:17:27.349 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:792 - Importing data
+2026-01-19 22:17:27.349 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:814 - Using provided DataFrame
+2026-01-19 22:17:27.350 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:890 - Prepreprocessing groups of df.shape=(192, 11)
+2026-01-19 22:17:27.355 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups_and_timestamps:946 - Updated groups of processed_df.shape=(192, 11)
+2026-01-19 22:17:27.355 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:863 - Clipping outliers with mean +/- 5SD
+2026-01-19 22:17:27.359 | INFO     | synthefy_pkg.preprocessing.preprocess:load_and_prep_rawdata:870 - Data loaded in 0.01 seconds; df.shape = (192, 11)
+2026-01-19 22:17:27.359 | WARNING  | synthefy_pkg.preprocessing.preprocess:process_data:2019 - Using stratified data split
+2026-01-19 22:17:27.360 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `timeseries` scalers info
+2026-01-19 22:17:27.360 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `continuous` scalers info
+2026-01-19 22:17:27.360 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `discrete` scalers info
+2026-01-19 22:17:27.361 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1140 - Validating `group_labels` scalers info
+2026-01-19 22:17:27.361 | INFO     | synthefy_pkg.preprocessing.preprocess:validate_scalers:1191 - Scalers and encoders validated successfully.
+2026-01-19 22:17:27.361 | INFO     | synthefy_pkg.preprocessing.preprocess:process_data:2072 - Reordering columns
+2026-01-19 22:17:27.363 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_discrete:1311 - onehot encoding cols: ['gender_male']
+2026-01-19 22:17:27.364 | WARNING  | synthefy_pkg.preprocessing.preprocess:encode_by_type:1267 - Using saved encoder for: onehot
+2026-01-19 22:17:27.366 | INFO     | synthefy_pkg.preprocessing.preprocess:encode_by_type:1277 - onehot encoded cols: 2
+2026-01-19 22:17:27.367 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1518 - Started windowing
+2026-01-19 22:17:27.367 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1357 - Started windowing
+2026-01-19 22:17:27.368 | WARNING  | synthefy_pkg.preprocessing.preprocess:generate_windows:312 - About to generate 1 windows - this may consume significant memory!
+2026-01-19 22:17:27.369 | INFO     | synthefy_pkg.preprocessing.preprocess:reshape_for_timeseries:1397 - Finished windowing, resulting: windows_3d_array.shape=(1, 192, 13)
+2026-01-19 22:17:27.369 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1524 - Dividing into window types
+2026-01-19 22:17:27.369 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1551 - num_timeseries: 0, num_continuous: 10, num_discrete: 2, num_original_discrete: 1
+2026-01-19 22:17:27.370 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1554 - total_windows.shape: (1, 192, 13)
+2026-01-19 22:17:27.469 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timeseries.shape = (1, 192, 0)
+2026-01-19 22:17:27.469 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - continuous.shape = (1, 192, 10)
+2026-01-19 22:17:27.469 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - discrete.shape = (1, 192, 2)
+2026-01-19 22:17:27.469 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp.shape = (1, 192, 0)
+2026-01-19 22:17:27.470 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - timestamp_conditions.shape = (0,)
+2026-01-19 22:17:27.470 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_discrete.shape = (1, 192, 1)
+2026-01-19 22:17:27.470 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1625 - original_text.shape = (1, 192, 0)
+2026-01-19 22:17:27.470 | INFO     | synthefy_pkg.preprocessing.preprocess:process_groups:1657 - Finished processing groups
+2026-01-19 22:17:27.472 | INFO     | synthefy_pkg.utils.scaling_utils:transform_using_scaler:616 - Transforming windows of type `continuous` with scalers: {'awake_mins': [{'scaler': StandardScaler()}], 'age': [{'scaler': StandardScaler()}], 'low_activity_time': [{'scaler': StandardScaler()}], 'deep_mins': [{'scaler': StandardScaler()}], 'sleep_duration': [{'scaler': StandardScaler()}], 'restored_duration': [{'scaler': StandardScaler()}], 'non_wear_time': [{'scaler': StandardScaler()}], 'rem_mins': [{'scaler': StandardScaler()}], 'steps': [{'scaler': StandardScaler()}], 'active_calories': [{'scaler': StandardScaler()}]}
+2026-01-19 22:17:28.463 | INFO     | services.demo_synthesis_service:generate:427 - Running synthesis model inference...
+2026-01-19 22:17:28.463 | INFO     | services.demo_synthesis_service:generate:428 - Continuous shape: (1, 192, 10), Discrete shape: (1, 192, 2)
+2026-01-19 22:17:28.463 | INFO     | services.demo_synthesis_service:generate:460 - Running batched synthesis with 3 sample(s)...
+2026-01-19 22:17:28.463 | INFO     | services.demo_synthesis_service:generate:473 - Batched conditions: continuous=(3, 192, 10), discrete=(3, 192, 2)
+2026-01-19 22:17:34.785 | INFO     | services.demo_synthesis_service:experiment:172 - Loading synthesis config from: /home/ec2-user/SageMaker/synthefy-package-external/examples/configs/synthesis_configs/config_oura_subset_synthesis.yaml
+2026-01-19 22:17:34.793 | INFO     | services.demo_synthesis_service:experiment:196 - Set random inference_seed: 60842
+2026-01-19 22:17:34.793 | INFO     | services.demo_synthesis_service:experiment:198 - Using denoiser: flexible_patched_diffusion_transformer for model_type: flexible
+2026-01-19 22:17:34.793 | INFO     | services.demo_synthesis_service:experiment:201 - Using task_type: synthesis
+2026-01-19 22:17:34.801 | WARNING  | synthefy_pkg.configs.dataset_configs:set_constraint_parameters:137 - Will use predetermined_constraint_values from saved constraints from preprocessing

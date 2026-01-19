@@ -29,10 +29,10 @@ from synthefy_pkg.model.trainers.timeseries_decoder_forecasting_trainer import (
     TimeSeriesDecoderForecastingTrainer,
 )
 from synthefy_pkg.utils.basic_utils import ENDC, OKBLUE
-from synthefy_pkg.utils.constrained_synthesis_utils import (
-    get_equality_constraints,
-    project_all_samples_to_equality_constraints,
-)
+# from synthefy_pkg.utils.constrained_synthesis_utils import (
+#     get_equality_constraints,
+#     project_all_samples_to_equality_constraints,
+# )
 
 COMPILE = True
 
@@ -570,163 +570,163 @@ def projected_synthesis_via_diffusion(
 
 
 # TODO - the synthesis_via_X functions are very similar - refactor to use a common function
-def synthesis_via_projected_diffusion(
-    batch,
-    synthesizer,
-    dataset_config: DictConfig,
-) -> Dict[str, np.ndarray]:
-    """Synthesize data using projected diffusion with equality constraints.
+# def synthesis_via_projected_diffusion(
+#     batch,
+#     synthesizer,
+#     dataset_config: DictConfig,
+# ) -> Dict[str, np.ndarray]:
+#     """Synthesize data using projected diffusion with equality constraints.
 
-    This function performs synthesis using a diffusion model while projecting samples to satisfy
-    equality constraints. The constraints are extracted either from the input batch or from
-    predetermined during preprocessing stage min/max values stored in dataset files.
+#     This function performs synthesis using a diffusion model while projecting samples to satisfy
+#     equality constraints. The constraints are extracted either from the input batch or from
+#     predetermined during preprocessing stage min/max values stored in dataset files.
 
-    The function supports various constraint types including:
-    - min/max: Minimum and maximum values per channel
-    - argmax/argmin: Index of maximum/minimum values
-    - mean: Mean value per channel
-    - mean change: Mean of differences between consecutive values
-    - autocorrelation: Autocorrelation at specified lags
+#     The function supports various constraint types including:
+#     - min/max: Minimum and maximum values per channel
+#     - argmax/argmin: Index of maximum/minimum values
+#     - mean: Mean value per channel
+#     - mean change: Mean of differences between consecutive values
+#     - autocorrelation: Autocorrelation at specified lags
 
-    Args:
-        batch: Input batch containing data and condition embeddings of shape (batch, channels, horizon)
-        synthesizer: Diffusion model used for synthesis
-        dataset_config (DictConfig): Configuration containing:
-            - dataset_name (str): Name of dataset for loading predetermined constraints from preprocessing stage.
-            - constraints: List of constraints to enforce
-                    (e.g. ["min", "max", "mean", "argmax", "argmin", "mean_change", "autocorr_1", "max and argmax"])
-            - projection_during_synthesis: Method to use for projection during synthesis: "strict" or "clipping"
-                - "clipping": requires "min" or/and "max" constraints
-                - "strict": can handle all constraints
-            - extract_equality_constraints_from_windows (bool): Whether to extract constraints from batch
-            - predetermined_constraint_values: Dictionary containing predetermined min/max or other constraint values for constraints
-                e.g. {"min": 0.0, "max": 1.0}
-            - selectively_denoise: Whether to use selective denoising approach
+#     Args:
+#         batch: Input batch containing data and condition embeddings of shape (batch, channels, horizon)
+#         synthesizer: Diffusion model used for synthesis
+#         dataset_config (DictConfig): Configuration containing:
+#             - dataset_name (str): Name of dataset for loading predetermined constraints from preprocessing stage.
+#             - constraints: List of constraints to enforce
+#                     (e.g. ["min", "max", "mean", "argmax", "argmin", "mean_change", "autocorr_1", "max and argmax"])
+#             - projection_during_synthesis: Method to use for projection during synthesis: "strict" or "clipping"
+#                 - "clipping": requires "min" or/and "max" constraints
+#                 - "strict": can handle all constraints
+#             - extract_equality_constraints_from_windows (bool): Whether to extract constraints from batch
+#             - predetermined_constraint_values: Dictionary containing predetermined min/max or other constraint values for constraints
+#                 e.g. {"min": 0.0, "max": 1.0}
+#             - selectively_denoise: Whether to use selective denoising approach
 
-    Returns:
-        dict: Dictionary containing:
-            - timeseries: The synthesized time series data (numpy array)
-            - discrete_conditions: Discrete condition embeddings used (numpy array)
-            - continuous_conditions: Continuous condition embeddings used (numpy array)
-    """
-    T, Alpha, Alpha_bar, Sigma = (
-        synthesizer.diffusion_hyperparameters["T"],
-        synthesizer.diffusion_hyperparameters["Alpha"],
-        synthesizer.diffusion_hyperparameters["Alpha_bar"],
-        synthesizer.diffusion_hyperparameters["Sigma"],
-    )
-    device = synthesizer.device
-    Alpha = Alpha.to(device)
-    Alpha_bar = Alpha_bar.to(device)
-    Sigma = Sigma.to(device)
+#     Returns:
+#         dict: Dictionary containing:
+#             - timeseries: The synthesized time series data (numpy array)
+#             - discrete_conditions: Discrete condition embeddings used (numpy array)
+#             - continuous_conditions: Continuous condition embeddings used (numpy array)
+#     """
+#     T, Alpha, Alpha_bar, Sigma = (
+#         synthesizer.diffusion_hyperparameters["T"],
+#         synthesizer.diffusion_hyperparameters["Alpha"],
+#         synthesizer.diffusion_hyperparameters["Alpha_bar"],
+#         synthesizer.diffusion_hyperparameters["Sigma"],
+#     )
+#     device = synthesizer.device
+#     Alpha = Alpha.to(device)
+#     Alpha_bar = Alpha_bar.to(device)
+#     Sigma = Sigma.to(device)
 
-    input_ = synthesizer.prepare_training_input(batch)
-    discrete_cond_input = input_["discrete_cond_input"]
-    continuous_cond_input = input_["continuous_cond_input"]
+#     input_ = synthesizer.prepare_training_input(batch)
+#     discrete_cond_input = input_["discrete_cond_input"]
+#     continuous_cond_input = input_["continuous_cond_input"]
 
-    sample = input_["sample"]
-    equality_constraints = get_equality_constraints(dataset_config, sample)
-    B, K, H = sample.shape
-    x = torch.randn_like(sample).to(device)
-    warm_start_samples = sample.detach().cpu().numpy()
+#     sample = input_["sample"]
+#     equality_constraints = get_equality_constraints(dataset_config, sample)
+#     B, K, H = sample.shape
+#     x = torch.randn_like(sample).to(device)
+#     warm_start_samples = sample.detach().cpu().numpy()
 
-    if dataset_config.selectively_denoise:
-        T = 20
-        Alpha_bar_current = Alpha_bar[T - 1]
-        x = (Alpha_bar_current**0.5) * sample + (
-            1 - Alpha_bar_current
-        ) ** 0.5 * torch.randn_like(sample).to(device)
-        logger.info("Using the selective denoising approach")
-        warm_start_samples = x.detach().cpu().numpy()
+#     if dataset_config.selectively_denoise:
+#         T = 20
+#         Alpha_bar_current = Alpha_bar[T - 1]
+#         x = (Alpha_bar_current**0.5) * sample + (
+#             1 - Alpha_bar_current
+#         ) ** 0.5 * torch.randn_like(sample).to(device)
+#         logger.info("Using the selective denoising approach")
+#         warm_start_samples = x.detach().cpu().numpy()
 
-    differences_list = []
-    with torch.no_grad():
-        for t in range(T - 1, -1, -1):
-            # sleep(0.001)  # TODO @sai - do we need this?
-            # logger.info(t)
-            diffusion_steps = torch.LongTensor(
-                [
-                    t,
-                ]
-                * B
-            ).to(device)
+#     differences_list = []
+#     with torch.no_grad():
+#         for t in range(T - 1, -1, -1):
+#             # sleep(0.001)  # TODO @sai - do we need this?
+#             # logger.info(t)
+#             diffusion_steps = torch.LongTensor(
+#                 [
+#                     t,
+#                 ]
+#                 * B
+#             ).to(device)
 
-            # get the denoiser input
-            synthesis_input = {
-                "noisy_sample": x,
-                "discrete_cond_input": discrete_cond_input,
-                "continuous_cond_input": continuous_cond_input,
-                "diffusion_step": diffusion_steps,
-            }
+#             # get the denoiser input
+#             synthesis_input = {
+#                 "noisy_sample": x,
+#                 "discrete_cond_input": discrete_cond_input,
+#                 "continuous_cond_input": continuous_cond_input,
+#                 "diffusion_step": diffusion_steps,
+#             }
 
-            # get the noise estimate
-            epsilon_theta = synthesizer(synthesis_input)
+#             # get the noise estimate
+#             epsilon_theta = synthesizer(synthesis_input)
 
-            # get the clean sample estimate
-            # logger.info(Alpha_bar[t-1], Alpha_bar[t], t)
-            x0_est = get_sample_est_from_noisy_sample(
-                x, epsilon_theta, Alpha_bar[t]
-            )
-            x0_est_numpy = x0_est.detach().cpu().numpy()
+#             # get the clean sample estimate
+#             # logger.info(Alpha_bar[t-1], Alpha_bar[t], t)
+#             x0_est = get_sample_est_from_noisy_sample(
+#                 x, epsilon_theta, Alpha_bar[t]
+#             )
+#             x0_est_numpy = x0_est.detach().cpu().numpy()
 
-            # perform penalty-based projection
-            if dataset_config.gamma_choice == "lin":
-                penalty_coefficient = Alpha_bar[t].item() * 1e5
-            elif dataset_config.gamma_choice == "quad":
-                penalty_coefficient = Alpha_bar[t].item() ** 2 * 1e5
-            else:
-                penalty_coefficient = np.clip(
-                    np.exp(1 / (1 - Alpha_bar[t - 1].item())), 0.1, 1e5
-                )
+#             # perform penalty-based projection
+#             if dataset_config.gamma_choice == "lin":
+#                 penalty_coefficient = Alpha_bar[t].item() * 1e5
+#             elif dataset_config.gamma_choice == "quad":
+#                 penalty_coefficient = Alpha_bar[t].item() ** 2 * 1e5
+#             else:
+#                 penalty_coefficient = np.clip(
+#                     np.exp(1 / (1 - Alpha_bar[t - 1].item())), 0.1, 1e5
+#                 )
 
-            projected_x0_est = project_all_samples_to_equality_constraints(
-                x0_est_numpy,
-                equality_constraints,
-                penalty_coefficient=penalty_coefficient,
-                warm_start_samples=warm_start_samples,
-                projection_method=dataset_config.projection_during_synthesis,
-                dataset_name=dataset_config.dataset_name,
-            )
-            warm_start_samples = projected_x0_est
-            projected_x0_est = torch.tensor(projected_x0_est).to(device)
+#             projected_x0_est = project_all_samples_to_equality_constraints(
+#                 x0_est_numpy,
+#                 equality_constraints,
+#                 penalty_coefficient=penalty_coefficient,
+#                 warm_start_samples=warm_start_samples,
+#                 projection_method=dataset_config.projection_during_synthesis,
+#                 dataset_name=dataset_config.dataset_name,
+#             )
+#             warm_start_samples = projected_x0_est
+#             projected_x0_est = torch.tensor(projected_x0_est).to(device)
 
-            control_param = ((1 - Alpha_bar[t - 1]) / (1 - Alpha_bar[t])) * (
-                1 - Alpha_bar[t] / Alpha_bar[t - 1]
-            )  # DDPM
-            if t > 0:
-                noise = torch.randn_like(x).to(device)
-                x = (
-                    (Alpha_bar[t - 1] ** 0.5) * projected_x0_est
-                    + (1.0 - Alpha_bar[t - 1] - control_param) ** 0.5
-                    * epsilon_theta
-                    + noise * (control_param**0.5)
-                )
-                Alpha_bar_prev = Alpha_bar[t - 1]
-                true_noisy_sample = (Alpha_bar_prev**0.5) * sample
-                diff = true_noisy_sample - x
-                samplewise_diff = torch.mean(torch.square(diff), dim=(1, 2))
-                differences_list.append({t: samplewise_diff})
+#             control_param = ((1 - Alpha_bar[t - 1]) / (1 - Alpha_bar[t])) * (
+#                 1 - Alpha_bar[t] / Alpha_bar[t - 1]
+#             )  # DDPM
+#             if t > 0:
+#                 noise = torch.randn_like(x).to(device)
+#                 x = (
+#                     (Alpha_bar[t - 1] ** 0.5) * projected_x0_est
+#                     + (1.0 - Alpha_bar[t - 1] - control_param) ** 0.5
+#                     * epsilon_theta
+#                     + noise * (control_param**0.5)
+#                 )
+#                 Alpha_bar_prev = Alpha_bar[t - 1]
+#                 true_noisy_sample = (Alpha_bar_prev**0.5) * sample
+#                 diff = true_noisy_sample - x
+#                 samplewise_diff = torch.mean(torch.square(diff), dim=(1, 2))
+#                 differences_list.append({t: samplewise_diff})
 
-            else:
-                x = projected_x0_est
+#             else:
+#                 x = projected_x0_est
 
-    synthesized_timeseries = synthesizer.prepare_output(x)
+#     synthesized_timeseries = synthesizer.prepare_output(x)
 
-    dataset_dict = {
-        "timeseries": synthesized_timeseries,
-        "equality_constraints": equality_constraints,
-        "discrete_conditions": batch["discrete_label_embedding"]
-        .detach()
-        .cpu()
-        .numpy(),
-        "continuous_conditions": batch["continuous_label_embedding"]
-        .detach()
-        .cpu()
-        .numpy(),
-        "differences": differences_list,
-    }
+#     dataset_dict = {
+#         "timeseries": synthesized_timeseries,
+#         "equality_constraints": equality_constraints,
+#         "discrete_conditions": batch["discrete_label_embedding"]
+#         .detach()
+#         .cpu()
+#         .numpy(),
+#         "continuous_conditions": batch["continuous_label_embedding"]
+#         .detach()
+#         .cpu()
+#         .numpy(),
+#         "differences": differences_list,
+#     }
 
-    return dataset_dict
+#     return dataset_dict
 
 
 def synthesis_via_gan(batch, synthesizer, similarity_guidance_dict=None):

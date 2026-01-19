@@ -300,7 +300,6 @@ class DemoSynthesisService:
         )
         from synthefy_pkg.utils.synthesis_utils import (
             forecast_via_diffusion,
-            synthesis_via_projected_diffusion,
         )
 
         # Setup inference once (loads model if not already loaded)
@@ -329,9 +328,7 @@ class DemoSynthesisService:
             logger.info(f"Using forecast_length={effective_forecast_length} for forecast task")
         else:
             synthesis_function = (
-                synthesis_via_projected_diffusion
-                if experiment.configuration.dataset_config.use_constraints
-                else get_synthesis_via_diffusion
+                get_synthesis_via_diffusion
             )
 
         # Convert to tensors
