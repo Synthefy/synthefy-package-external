@@ -39,31 +39,31 @@ if not SYNTHEFY_DATASETS_BASE:
 DATASET_MODEL_PATHS: Dict[str, Dict[str, str]] = {
     "oura": {
         "standard": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/oura/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/oura/Time_Series_Diffusion_Training/"
             "synthesis_ppg/checkpoints/best_model.ckpt"
         ),
         "flexible": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/oura/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/oura/Time_Series_Diffusion_Training/"
             "synthesis_oura_flexible/checkpoints/best_model.ckpt"
         ),
     },
     "oura_subset": {
         "standard": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/oura_subset/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/oura_subset/Time_Series_Diffusion_Training/"
             "synthesis_ppg/checkpoints/best_model.ckpt"
         ),
         "flexible": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/oura_subset/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/oura_subset/Time_Series_Diffusion_Training/"
             "synthesis_oura_subset_flexible/checkpoints/best_model.ckpt"
         ),
     },
     "ppg": {
         "standard": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/ppg/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/ppg/Time_Series_Diffusion_Training/"
             "synthesis_ppg/checkpoints/best_model.ckpt"
         ),
         "flexible": os.path.expanduser(
-            f"{SYNTHEFY_DATASETS_BASE}/ppg/Time_Series_Diffusion_Training/"
+            f"{SYNTHEFY_DATASETS_BASE}/training_logs/ppg/Time_Series_Diffusion_Training/"
             "synthesis_ppg/checkpoints/best_model.ckpt"  # Same for ppg
         ),
     },
@@ -89,7 +89,7 @@ def get_model_path(dataset_name: str, model_type: str) -> str:
         )
     # Fallback
     return os.path.expanduser(
-        f"{SYNTHEFY_DATASETS_BASE}/synthesis/checkpoints/best_model.ckpt"
+        f"{SYNTHEFY_DATASETS_BASE}/training_logs/synthesis/checkpoints/best_model.ckpt"
     )
 
 
